@@ -823,5 +823,17 @@
     "storage": [
       {"name":"widid.wid.js","url":"widget.js"}
     ]
+  },
+  { "id": "flclock",
+    "name": "My Clock App",
+    "shortName":"My Clock",
+    "icon": "app.png",
+    "version":"0.01",
+    "description": "Just a minimalistic analog clock",
+    "tags": "",
+    "storage": [
+      {"name":"flclock.app.js","url":"app.js"},
+      {"name":"flclock.img","url":"app-icon.js","evaluate":true}
+    ]
   }
 ]
