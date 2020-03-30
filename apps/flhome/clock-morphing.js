@@ -1,6 +1,6 @@
 var locale = require("locale");
 // Offscreen buffer
-var buf = Graphics.createArrayBuffer(240,86,1,{msb:true});
+var buf = Graphics.createArrayBuffer(240,100,1,{msb:true});
 function flip() {
   g.setColor(1,1,1);
   g.drawImage({width:buf.getWidth(),height:buf.getHeight(),buffer:buf.buffer},0,50);
@@ -148,7 +148,7 @@ function draw(lastText,thisText,n) {
   buf.setFontAlign(0,-1);
   var date = locale.date(d,false);
   buf.drawString(date, buf.getWidth()/2, y+8);
-  buf.drawString("FL Custom Home Screen", buf.getWidth()/2, y+10);
+  buf.drawString("FL Custom Home Screen", buf.getWidth()/2, y+15);
   flip();
 }
 
