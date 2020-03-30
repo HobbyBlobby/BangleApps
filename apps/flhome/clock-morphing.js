@@ -5,10 +5,10 @@ var buf = Graphics.createArrayBuffer(240,100,1,{msb:true});
 var width = 240;
 var height = 100;
 
-Bangle.on('lcdPower',function(on) {
-  if (on)
-    showTime();
-});
+function flip() {
+  g.setColor(1,1,1);
+  g.drawImage({width:buf.getWidth(),height:buf.getHeight(),buffer:buf.buffer},0,50);
+}
 
 var PI = Math.acos(0) * 2;
 
@@ -49,7 +49,7 @@ function tickMark(hour, distance) {
   points = [0, -distance, 0, -distance-5];
   points = rotateBy(points, angle * PI / 180);
   points = moveBy(points, width/2, height/2);
-  g.drawLine(points[0], points[1], points[2], points[3]);
+  buf.drawLine(points[0], points[1], points[2], points[3]);
 }
 
 function tickNumber(hour, distance) {
@@ -57,13 +57,14 @@ function tickNumber(hour, distance) {
   points = [0, -distance, 0];
   points = rotateBy(points, angle * PI / 180);
   points = moveBy(points, width/2, height/2);
-  g.drawString(hour.toString(), points[0], points[1]);
+  buf.drawString(hour.toString(), points[0], points[1]);
 }
 
 function drawHands() {
-  g.clear();
+  if (!Bangle.isLCDOn()) return;
+  buf.clear();
   // inner circle
-  g.drawCircle(width/2, height/2, 10);
+  buf.drawCircle(width/2, height/2, 10);
   // draw numbers: seconds
   curDate = Date(Date.now());
   seconds = curDate.getSeconds();
@@ -90,7 +91,7 @@ function drawHands() {
   drawHand(seconds/60 * 360, 1, 100, false);
   drawHand(minutes/60 * 360, 4, 80, true);
   drawHand(hours/12 * 360, 8, 60, true);
-  g.flip();
+  flip();
 }
 
 function drawHand(angle, handWidth, handLength, fill) {
@@ -112,11 +113,18 @@ function drawHand(angle, handWidth, handLength, fill) {
   points = moveBy(points, width/2, height/2);
 
   if(fill) {
-    g.fillPoly(points, true);
+    buf.fillPoly(points, true);
   } else {
-    g.drawPoly(points, true);
+    buf.drawPoly(points, true);
   }
 }
+
+
+
+Bangle.on('lcdPower',function(on) {
+  if (on)
+    showTime();
+});
 
 g.clear();
 Bangle.loadWidgets();
