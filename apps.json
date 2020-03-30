@@ -840,7 +840,7 @@
     { "id": "flhome",
     "name": "fl Home Screen",
     "icon": "clock-morphing.png",
-    "version":"0.03",
+    "version":"0.01",
     "description": "Replacement for Home Screen with pages",
     "tags": "clock",
     "type":"clock",

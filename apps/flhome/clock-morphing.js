@@ -1,194 +1,129 @@
 var locale = require("locale");
 // Offscreen buffer
 var buf = Graphics.createArrayBuffer(240,100,1,{msb:true});
-function flip() {
-  g.setColor(1,1,1);
-  g.drawImage({width:buf.getWidth(),height:buf.getHeight(),buffer:buf.buffer},0,50);
-}
-// The last time that we displayed
-var lastTime = "     ";
-// If animating, this is the interval's id
-var animInterval;
 
-/* Get array of lines from digit d to d+1.
- n is the amount (0..1)
- maxFive is true is this digit only counts 0..5 */
-const DIGITS = {
-" ":n=>[],
-"0":n=>[
-[n,0,1,0],
-[1,0,1,1],
-[1,1,1,2],
-[n,2,1,2],
-[n,1,n,2],
-[n,0,n,1]],
-"1":n=>[
-[1-n,0,1,0],
-[1,0,1,1],
-[1-n,1,1,1],
-[1-n,1,1-n,2],
-[1-n,2,1,2]],
-"2":n=>[
-[0,0,1,0],
-[1,0,1,1],
-[0,1,1,1],
-[0,1+n,0,2],
-[1,2-n,1,2],
-[0,2,1,2]],
-"3":n=>[
-[0,0,1-n,0],
-[0,0,0,n],
-[1,0,1,1],
-[0,1,1,1],
-[1,1,1,2],
-[n,2,1,2]],
-"4":n=>[
-[0,0,0,1],
-[1,0,1-n,0],
-[1,0,1,1-n],
-[0,1,1,1],
-[1,1,1,2],
-[1-n,2,1,2]],
-"5": (n,maxFive)=>maxFive ? [ // 5 -> 0
-[0,0,0,1],
-[0,0,1,0],
-[n,1,1,1],
-[1,1,1,2],
-[0,2,1,2],
-[0,2,0,2],
-[1,1-n,1,1],
-[0,1,0,1+n]] : [ // 5 -> 6
-[0,0,0,1],
-[0,0,1,0],
-[0,1,1,1],
-[1,1,1,2],
-[0,2,1,2],
-[0,2-n,0,2]],
-"6":n=>[
-[0,0,0,1-n],
-[0,0,1,0],
-[n,1,1,1],
-[1,1-n,1,1],
-[1,1,1,2],
-[n,2,1,2],
-[0,1-n,0,2-2*n]],
-"7":n=>[
-[0,0,0,n],
-[0,0,1,0],
-[1,0,1,1],
-[1-n,1,1,1],
-[1,1,1,2],
-[1-n,2,1,2],
-[1-n,1,1-n,2]],
-"8":n=>[
-[0,0,0,1],
-[0,0,1,0],
-[1,0,1,1],
-[0,1,1,1],
-[1,1,1,2],
-[0,2,1,2],
-[0,1,0,2-n]],
-"9":n=>[
-[0,0,0,1],
-[0,0,1,0],
-[1,0,1,1],
-[0,1,1-n,1],
-[0,1,0,1+n],
-[1,1,1,2],
-[0,2,1,2]],
-":":n=>[
-[0.4,0.4,0.6,0.4],
-[0.6,0.4,0.6,0.6],
-[0.6,0.6,0.4,0.6],
-[0.4,0.4,0.4,0.6],
-[0.4,1.4,0.6,1.4],
-[0.6,1.4,0.6,1.6],
-[0.6,1.6,0.4,1.6],
-[0.4,1.4,0.4,1.6]]
-};
-
-/* Draw a transition between lastText and thisText.
- 'n' is the amount - 0..1 */
-function draw(lastText,thisText,n) {
-  buf.clear();
-  var x = 1;  // x offset
-  const p = 2; // padding around digits
-  var y = p; // y offset
-  const s = 34; // character size
-  for (var i=0;i<lastText.length;i++) {
-    var lastCh = lastText[i];
-    var thisCh = thisText[i];
-    if (thisCh==":") x-=4;
-    var ch, chn = n;
-    if (lastCh!==undefined &&
-        (thisCh-1==lastCh ||
-         (thisCh==0 && lastCh==5) ||
-         (thisCh==0 && lastCh==9)))
-      ch = lastCh;
-    else {
-      ch = thisCh;
-      chn = 0;
-    }
-    var l = DIGITS[ch](chn,lastCh==5 && thisCh==0);
-    l.forEach(c=>{
-      if (c[0]!=c[2]) // horiz
-        buf.fillRect(x+c[0]*s,y+c[1]*s-p,x+c[2]*s,y+c[3]*s+p);
-      else if (c[1]!=c[3]) // vert
-        buf.fillRect(x+c[0]*s-p,y+c[1]*s,x+c[2]*s+p,y+c[3]*s);
-    });
-    if (thisCh==":") x-=4;
-    x+=s+p+7;
-  }
-  y += 2*s;
-  var d = new Date();
-  buf.setFont("6x8");
-  buf.setFontAlign(-1,-1);
-  buf.drawString(("0"+d.getSeconds()).substr(-2), x, y-8);
-  // date
-  buf.setFontAlign(0,-1);
-  var date = locale.date(d,false);
-  buf.drawString(date, buf.getWidth()/2, y+8);
-  buf.drawString("FL Custom Home Screen", buf.getWidth()/2, y+15);
-  flip();
-}
-
-/* Show the current time, and animate if needed */
-function showTime() {
-  if (!Bangle.isLCDOn()) return;
-  if (animInterval) return; // in animation - quit
-  var d = new Date();
-  var t = (" "+d.getHours()).substr(-2)+":"+
-          ("0"+d.getMinutes()).substr(-2);
-  var l = lastTime;
-  // same - don't animate
-  if (t==l) {
-    draw(t,l,0);
-    return;
-  }
-  var n = 0;
-  animInterval = setInterval(function() {
-    n += 1/10;
-    if (n>=1) {
-      n=1;
-      clearInterval(animInterval);
-      animInterval=0;
-    }
-    draw(l,t,n);
-  }, 20);
-  lastTime = t;
-}
+var width = 240;
+var height = 100;
 
 Bangle.on('lcdPower',function(on) {
   if (on)
     showTime();
 });
 
+var PI = Math.acos(0) * 2;
+
+function moveBy(points, dx, dy) {
+  newPoints = [];
+  var isX = true;
+  for(var i = 0; i < points.length; ++i) {
+	if(isX) {
+  	newPoints.push(points[i] + dx);
+  	isX = false;
+	} else {
+  	newPoints.push(points[i] + dy);
+  	isX = true;
+	}
+  }
+  return newPoints;
+}
+
+function rotateBy(points, angle) {
+  newPoints = [];
+  var isX = true;
+  for(var i = 0; i < points.length; ++i) {
+	if(isX) {
+  	newX = points[i] * Math.cos(angle) - points[i+1] * Math.sin(angle);
+  	newPoints.push(newX);
+  	isX = false;
+	} else {
+  	newY = points[i-1] * Math.sin(angle) + points[i] * Math.cos(angle);
+  	newPoints.push(newY);
+  	isX = true;
+	}
+  }
+  return newPoints;
+}
+
+function tickMark(hour, distance) {
+  angle = 360/12 * hour;
+  points = [0, -distance, 0, -distance-5];
+  points = rotateBy(points, angle * PI / 180);
+  points = moveBy(points, width/2, height/2);
+  g.drawLine(points[0], points[1], points[2], points[3]);
+}
+
+function tickNumber(hour, distance) {
+  angle = 360/12 * (hour - 0.05);
+  points = [0, -distance, 0];
+  points = rotateBy(points, angle * PI / 180);
+  points = moveBy(points, width/2, height/2);
+  g.drawString(hour.toString(), points[0], points[1]);
+}
+
+function drawHands() {
+  g.clear();
+  // inner circle
+  g.drawCircle(width/2, height/2, 10);
+  // draw numbers: seconds
+  curDate = Date(Date.now());
+  seconds = curDate.getSeconds();
+  tickBelow = Math.floor(seconds / 60 * 12);
+  tickAbove = Math.ceil(seconds / 60 * 12);
+  if(tickAbove == tickBelow) {
+	++tickAbove;
+	tickMark(tickBelow--, 108);
+  }
+  tickMark(tickBelow, 108);
+  tickMark(tickAbove, 108);  
+  // draw numbers: minutes
+  minutes = curDate.getMinutes();
+  tickMinute = Math.round(minutes / 60 * 12);
+  tickNumber(tickMinute, 100);
+  // draw numbers: hours
+  hours = curDate.getHours();
+  if(hours > 12) {
+	hours -=12;
+  }
+  tickHour = Math.round(hours);
+  tickNumber(tickHour, 100);
+
+  drawHand(seconds/60 * 360, 1, 100, false);
+  drawHand(minutes/60 * 360, 4, 80, true);
+  drawHand(hours/12 * 360, 8, 60, true);
+  g.flip();
+}
+
+function drawHand(angle, handWidth, handLength, fill) {
+
+  var centerX = 0;
+  var centerY = -10;
+
+  var gutX = handWidth/2;
+  var gutY = -handLength * 0.8;
+
+  var tipX = 0;
+  var tipY = -handLength;
+
+  var backX = -handWidth/2;
+  var backY = -handLength * 0.8;
+
+  var points = [centerX, centerY, gutX, gutY, tipX, tipY, backX, backY];
+  points = rotateBy(points, angle * PI / 180);
+  points = moveBy(points, width/2, height/2);
+
+  if(fill) {
+    g.fillPoly(points, true);
+  } else {
+    g.drawPoly(points, true);
+  }
+}
+
 g.clear();
 Bangle.loadWidgets();
 Bangle.drawWidgets();
 // Update time once a second
-setInterval(showTime, 1000);
-showTime();
+setInterval(drawHands, 1000);
+drawHands();
 
 // Show launcher when middle button pressed
 setWatch(Bangle.showLauncher, BTN2, {repeat:false,edge:"falling"});
