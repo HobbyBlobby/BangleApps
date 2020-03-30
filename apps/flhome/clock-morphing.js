@@ -150,13 +150,8 @@ function showTime() {
 var mode = 0;
 var drawFunction = drawHands;
 
-Bangle.on('lcdPower',function(on) {
-  if (on)
-    drawFunction();
-});
-
-//dir left = -1, right = 1
-Bangle.on('swipe', function(dir) {
+function changeMode() {
+  console.log("Change");
   if(mode == 0) {
     mode = 1;
     drawFunction = showTime;
@@ -164,13 +159,26 @@ Bangle.on('swipe', function(dir) {
     mode = 0;
     drawFunction = drawHands;
   }
+  clearInterval(timerID);
+  drawFunction();
+  timerID = setInterval(drawFunction, 1000);
+}
+
+Bangle.on('lcdPower',function(on) {
+  if (on)
+    drawFunction();
+});
+
+//dir left = -1, right = 1
+Bangle.on('swipe', function(dir) {
+  changeMode();
 });
 
 g.clear();
 Bangle.loadWidgets();
 Bangle.drawWidgets();
 // Update time once a second
-setInterval(drawFunction, 1000);
+var timerID = setInterval(drawFunction, 1000);
 drawFunction();
 
 // Show launcher when middle button pressed
