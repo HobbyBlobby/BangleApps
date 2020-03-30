@@ -1,13 +1,13 @@
 var locale = require("locale");
 // Offscreen buffer
-var buf = Graphics.createArrayBuffer(240,100,1,{msb:true});
+var buf = Graphics.createArrayBuffer(180,180,1,{msb:true});
 
-var width = 240;
-var height = 100;
+var width = 160;
+var height = 160;
 
 function flip() {
-  g.setColor(1,1,1);
-  g.drawImage({width:buf.getWidth(),height:buf.getHeight(),buffer:buf.buffer},0,50);
+  g.setColor(0.8,1,0.8);
+  g.drawImage({width:buf.getWidth(),height:buf.getHeight(),buffer:buf.buffer},40,40);
 }
 
 var PI = Math.acos(0) * 2;
@@ -46,7 +46,7 @@ function rotateBy(points, angle) {
 
 function tickMark(hour, distance) {
   angle = 360/12 * hour;
-  points = [0, -distance, 0, -distance-5];
+  points = [0, -distance, 0, -distance+5];
   points = rotateBy(points, angle * PI / 180);
   points = moveBy(points, width/2, height/2);
   buf.drawLine(points[0], points[1], points[2], points[3]);
@@ -54,7 +54,7 @@ function tickMark(hour, distance) {
 
 function tickNumber(hour, distance) {
   angle = 360/12 * (hour - 0.05);
-  points = [0, -distance, 0];
+  points = [0, -distance+10, 0];
   points = rotateBy(points, angle * PI / 180);
   points = moveBy(points, width/2, height/2);
   buf.drawString(hour.toString(), points[0], points[1]);
@@ -63,6 +63,7 @@ function tickNumber(hour, distance) {
 function drawHands() {
   if (!Bangle.isLCDOn()) return;
   buf.clear();
+  buf.drawCircle(width/2, height/2, width/2);
   // inner circle
   buf.drawCircle(width/2, height/2, 10);
   // draw numbers: seconds
@@ -72,30 +73,32 @@ function drawHands() {
   tickAbove = Math.ceil(seconds / 60 * 12);
   if(tickAbove == tickBelow) {
 	++tickAbove;
-	tickMark(tickBelow--, 108);
+	tickMark(tickBelow--, height/2);
   }
-  tickMark(tickBelow, 108);
-  tickMark(tickAbove, 108);  
+  tickMark(tickBelow, height/2);
+  tickMark(tickAbove, height/2);  
   // draw numbers: minutes
   minutes = curDate.getMinutes();
   tickMinute = Math.round(minutes / 60 * 12);
-  tickNumber(tickMinute, 100);
+  tickNumber(tickMinute, height/2);
   // draw numbers: hours
   hours = curDate.getHours();
   if(hours > 12) {
 	hours -=12;
   }
   tickHour = Math.round(hours);
-  tickNumber(tickHour, 100);
+  tickNumber(tickHour, height/2);
 
-  drawHand(seconds/60 * 360, 1, 100, false);
+  drawHand(seconds/60 * 360, 1, 90, false);
   drawHand(minutes/60 * 360, 4, 80, true);
   drawHand(hours/12 * 360, 8, 60, true);
   flip();
 }
 
-function drawHand(angle, handWidth, handLength, fill) {
+function drawHand(angle, handWidth, relHandLength, fill) {
 
+  var handLength = relHandLength / 100.0 * height/2;
+  
   var centerX = 0;
   var centerY = -10;
 
