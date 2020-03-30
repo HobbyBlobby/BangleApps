@@ -1,15 +1,20 @@
 var locale = require("locale");
 // Offscreen buffer
-var buf = Graphics.createArrayBuffer(180,180,1,{msb:true});
+var buf = Graphics.createArrayBuffer(200,210,1,{msb:true});
 
-var width = 160;
-var height = 160;
+var width = 200;
+var height = 200;
+
+var colR = 0.9;
+var colG = 1.0;
+var colB = 0.9;
 
 function flip() {
-  g.setColor(0.8,1,0.8);
-  g.drawImage({width:buf.getWidth(),height:buf.getHeight(),buffer:buf.buffer},40,40);
+  g.setColor(colR, colG, colB);
+  g.drawImage({width:buf.getWidth(),height:buf.getHeight(),buffer:buf.buffer},20,30);
 }
 
+//###### ANALOG CLOCK
 var PI = Math.acos(0) * 2;
 
 function moveBy(points, dx, dy) {
@@ -53,17 +58,17 @@ function tickMark(hour, distance) {
 }
 
 function tickNumber(hour, distance) {
-  angle = 360/12 * (hour - 0.05);
+  angle = 360/12 * (hour - 0.00);
   points = [0, -distance+10, 0];
   points = rotateBy(points, angle * PI / 180);
   points = moveBy(points, width/2, height/2);
+  buf.setFontVector(12);
   buf.drawString(hour.toString(), points[0], points[1]);
 }
 
 function drawHands() {
   if (!Bangle.isLCDOn()) return;
   buf.clear();
-  buf.drawCircle(width/2, height/2, width/2);
   // inner circle
   buf.drawCircle(width/2, height/2, 10);
   // draw numbers: seconds
@@ -122,19 +127,51 @@ function drawHand(angle, handWidth, relHandLength, fill) {
   }
 }
 
+//###### DIGITAL CLOCK
+function showTime() {
+  buf.clear();
+  buf.setFontVector(40);
+  var curDate = Date(Date.now());
+  var hours = ('00' + curDate.getHours()).slice(-2);
+  var minutes = ('00' + curDate.getMinutes()).slice(-2);
+  var seconds = ('00' + curDate.getSeconds()).slice(-2);
+  buf.drawString(hours + ":" + minutes + ":" + seconds, 0,30);
+  colR = colB = colG = 1.0;
+//  flip();
+  buf.setFontVector(10);
+  var year = '' + curDate.getFullYear();
+  var month = ('00' + (curDate.getMonth() + 1)).slice(-2);
+  var day = ('00' + curDate.getDate()).slice(-2);
+  buf.drawString(day + "." + month + "." + year, 70, 100);
+  colR = colB = 0.9;
+  flip();
+}
 
+var mode = 0;
+var drawFunction = drawHands;
 
 Bangle.on('lcdPower',function(on) {
   if (on)
-    showTime();
+    drawFunction();
+});
+
+//dir left = -1, right = 1
+Bangle.on('swipe', function(dir) {
+  if(mode == 0) {
+    mode = 1;
+    drawFunction = showTime;
+  } else {
+    mode = 0;
+    drawFunction = drawHands;
+  }
 });
 
 g.clear();
 Bangle.loadWidgets();
 Bangle.drawWidgets();
 // Update time once a second
-setInterval(drawHands, 1000);
-drawHands();
+setInterval(drawFunction, 1000);
+drawFunction();
 
 // Show launcher when middle button pressed
 setWatch(Bangle.showLauncher, BTN2, {repeat:false,edge:"falling"});
