@@ -837,7 +837,6 @@
       {"name":"widid.wid.js","url":"widget.js"}
     ]
   },
-<<<<<<< HEAD
   { "id": "flclock",
     "name": "fl Clock App",
     "shortName":"My Clock",
@@ -865,7 +864,6 @@
     ],
     "sortorder" : -9
   },
-=======
   {
     "id": "grocery",
     "name": "Grocery",
@@ -881,7 +879,6 @@
       {"name":"grocery.img","url":"grocery-icon.js","evaluate":true}
     ]
   },
->>>>>>> upstream/master
   { "id": "marioclock",
     "name": "Mario Clock",
     "icon": "marioclock.png",
