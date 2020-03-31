@@ -96,7 +96,7 @@ function drawHands() {
 
   drawHand(seconds/60 * 360, 1, 90, false);
   drawHand(minutes/60 * 360, 4, 80, true);
-  drawHand(hours/12 * 360, 8, 60, true);
+  drawHand(hours/12 * 360 + 360/(12*60)*minutes, 8, 60, true);
   flip();
 }
 
