@@ -848,7 +848,7 @@
     "storage": [
       {"name":"flhome.app.js","url":"clock-morphing.js"},
       {"name":"flhome.img","url":"clock-morphing-icon.js","evaluate":true}
-    ],
+    ]
   },
   {
     "id": "grocery",
