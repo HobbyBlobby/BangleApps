@@ -837,20 +837,7 @@
       {"name":"widid.wid.js","url":"widget.js"}
     ]
   },
-  { "id": "flclock",
-    "name": "fl Clock App",
-    "shortName":"My Clock",
-    "icon": "app.png",
-    "version":"0.01",
-    "description": "Just a minimalistic analog clock",
-    "tags": "clock",
-    "allow_emulator":true,
-    "storage": [
-      {"name":"flclock.app.js","url":"app.js"},
-      {"name":"flclock.img","url":"app-icon.js","evaluate":true}
-    ]
-  },
-    { "id": "flhome",
+  { "id": "flhome",
     "name": "fl Home Screen",
     "icon": "clock-morphing.png",
     "version":"0.01",
@@ -862,7 +849,6 @@
       {"name":"flhome.app.js","url":"clock-morphing.js"},
       {"name":"flhome.img","url":"clock-morphing-icon.js","evaluate":true}
     ],
-    "sortorder" : -9
   },
   {
     "id": "grocery",
