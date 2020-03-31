@@ -85,6 +85,9 @@ function drawHands() {
   // draw numbers: minutes
   minutes = curDate.getMinutes();
   tickMinute = Math.round(minutes / 60 * 12);
+  if(tickMinute == 0) {
+      tickMinute = 12;
+  }
   tickNumber(tickMinute, height/2);
   // draw numbers: hours
   hours = curDate.getHours();
@@ -92,6 +95,9 @@ function drawHands() {
 	hours -=12;
   }
   tickHour = Math.round(hours);
+  if(tickHour == 0) {
+      tickHour = 12;
+  }
   tickNumber(tickHour, height/2);
 
   drawHand(seconds/60 * 360, 1, 90, false);
