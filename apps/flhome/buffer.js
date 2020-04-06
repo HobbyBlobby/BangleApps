@@ -1,6 +1,6 @@
-exports.bufBG = Graphics.createArrayBuffer(240,240,1,{msb:true});
-exports.bufMain = Graphics.createArrayBuffer(240,240,1,{msb:true});
-exports.bufHeighlight = Graphics.createArrayBuffer(240,240,1,{msb:true});
+var bufBG = Graphics.createArrayBuffer(240,240,1,{msb:true});
+var bufMain = Graphics.createArrayBuffer(240,240,1,{msb:true});
+var bufHeighlight = Graphics.createArrayBuffer(240,240,1,{msb:true});
 
 var colBG = {"R": 0.3, "G": 0.3, "B": 0.3};
 var colMain = {"R": 0.8, "G": 1.0, "B": 0.8};
@@ -30,3 +30,7 @@ exports.clear = function () {
     bufMain.clear();
     bufHeighlight.clear();
 }
+
+exports.bufBG = bufBG;
+exports.bufMain = bufMain;
+exports.bufHeighlight = bufHeighlight;
