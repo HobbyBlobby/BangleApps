@@ -890,6 +890,19 @@
       {"name":"flhome.img","url":"clock-morphing-icon.js","evaluate":true}
     ]
   },
+  { "id": "flclock",
+    "name": "fl Swipe Clock",
+    "icon": "app.png",
+    "version":"0.01",
+    "description": "Analog and Digialt Clock with Swipe",
+    "tags": "clock",
+    "type":"clock",
+    "allow_emulator":true,
+    "storage": [
+      {"name":"flclock.app.js","url":"app.js"},
+      {"name":"app.img","url":"app-icon.js","evaluate":true}
+    ]
+  },
   {
     "id": "grocery",
     "name": "Grocery",
