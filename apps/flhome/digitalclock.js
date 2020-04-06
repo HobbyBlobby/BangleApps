@@ -1,5 +1,5 @@
 (function () {
     function draw() {
-        bufMain.drawString("Hello Digital", bufMain.height / 2, 10);
+        GlobalBuffer.bufMain.drawString("Hello Digital", bufMain.height / 2, 10);
     }
 }());

@@ -31,7 +31,7 @@ function nextScreen(dir) {
 }
 
 function draw() {
-    GloablBuffer.clear();
+    GlobalBuffer.clear();
     if(HomeScreen.screenList[HomeScreen.currentScreen]) {
         HomeScreen.screenList[HomeScreen.currentScreen].draw();
     }
@@ -70,7 +70,7 @@ Bangle.on('swipe', function(dir) {
 // Show launcher when middle button pressed
 setWatch(Bangle.showLauncher, BTN2, {repeat:false,edge:"falling"});
 // switch to cycle mode when long pressing btn1
-settWatch(function(e){
+setWatch(function(e){
     var isLong = (e.time-e.lastTime) > 2.0;
     if(isLone) {
         switchCycle();

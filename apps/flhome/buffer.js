@@ -3,8 +3,8 @@
     var bufMain = Graphics.createArrayBuffer(240,240,1,{msb:true});
     var bufHeighlight = Graphics.createArrayBuffer(240,240,1,{msb:true});
     
-    var colBG = {"R": 0.8, "G": 1.0, "B": 0.8};
-    var colMain = {"R": 0.3, "G": 0.3, "B": 0.3};
+    var colBG = {"R": 0.3, "G": 0.3, "B": 0.3};
+    var colMain = {"R": 0.8, "G": 1.0, "B": 0.8};
     var colHeighlight = {"R": 1.0, "G": 1.0, "B": 1.0};
     
     function flip() {
