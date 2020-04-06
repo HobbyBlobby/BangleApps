@@ -1,12 +1,12 @@
-var bufBG = Graphics.createArrayBuffer(240,240,1,{msb:true});
-var bufMain = Graphics.createArrayBuffer(240,240,1,{msb:true});
-var bufHeighlight = Graphics.createArrayBuffer(240,240,1,{msb:true});
+exports.bufBG = Graphics.createArrayBuffer(240,240,1,{msb:true});
+exports.bufMain = Graphics.createArrayBuffer(240,240,1,{msb:true});
+exports.bufHeighlight = Graphics.createArrayBuffer(240,240,1,{msb:true});
 
 var colBG = {"R": 0.3, "G": 0.3, "B": 0.3};
 var colMain = {"R": 0.8, "G": 1.0, "B": 0.8};
 var colHeighlight = {"R": 1.0, "G": 1.0, "B": 1.0};
 
-function flip() {
+exports.flip = function () {
     g.clear();
 
     g.setColor(colBG.R, colBG.G, colBG.B);
@@ -25,10 +25,8 @@ function flip() {
                  transparent: 0},0,0);
 }
 
-function clear() {
+exports.clear = function () {
     bufBG.clear();
     bufMain.clear();
     bufHeighlight.clear();
 }
-
-export{bufBG, bufMain, bufHeighligh, flip, clear};
