@@ -1,11 +1,11 @@
-var GlobalBuffer = require("buffer.js");
+GlobalBuffer = require("buffer.js");
 
 var HomeScreen = {
     "mode": "single", // can also be cycle
     "currentScreen": 0, // start with screen 0
     "screenList":  [
-        require("analogclock.js"),
-        require("digitalclock.js")
+      require("analogclock.js"),
+      require("digitalclock.js")
     ],
     "timerID": null,
     "cycleTimer": null
@@ -27,7 +27,7 @@ function nextScreen(dir) {
             HomeScreen.currentScreen = HomeScreen.screenList.length - 1;
         }
     }
-    HomeScreen.timerID = setInterval(draw(), 1000);    
+    HomeScreen.timerID = setInterval(draw, 1000);    
 }
 
 function draw() {
@@ -53,8 +53,8 @@ function init() {
     Bangle.loadWidgets();
     Bangle.drawWidgets();
 
-    HomeScreen.timerID = setInterval(HomeScreen.screenList[0].draw, 1000);
-    HomeScreen.screenList[0].draw();
+    HomeScreen.timerID = setInterval(draw, 1000);
+    draw();
 }
 
 Bangle.on('lcdPower',function(on) {
