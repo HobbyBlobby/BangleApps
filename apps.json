@@ -900,7 +900,7 @@
     "allow_emulator":true,
     "storage": [
       {"name":"flclock.app.js","url":"app.js"},
-      {"name":"app.img","url":"app-icon.js","evaluate":true}
+      {"name":"flclock.img","url":"app-icon.js","evaluate":true}
     ]
   },
   {
