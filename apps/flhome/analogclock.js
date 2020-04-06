@@ -1,6 +1,6 @@
 (function () {
     function draw() {
-        GlobalBuffer.bufMain.drawString("Hello Analog", bufMain.height / 2, 10);
-        GlobalBuffer.bufHeighlight.drawString("Second Text", bufMain.height/2+ 10, 10);
+        GlobalBuffer.bufMain.drawString("Hello Analog", 10, GlobalBuffer.bufMain.height / 2);
+        GlobalBuffer.bufHeighlight.drawString("Second Text", 20, GlobalBuffer.bufHeighlight.height/2+ 50);
     }
 }());
