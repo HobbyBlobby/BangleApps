@@ -1,7 +1,7 @@
-var height = GlobalBuffer.bufMain.height;
-var width = GlobalBuffer.bufMain.width;
+var height = 0;
+var width = 0;
 
-var radius = GlobalBuffer.bufMain.height;
+var radius = 0;
 
 var PI = Math.acos(0) * 2;
 
@@ -57,6 +57,10 @@ function tickNumber(hour, distance) {
 function drawHands() {
   if (!Bangle.isLCDOn()) return;
   // inner circle
+  height = GlobalBuffer.bufMain.height;
+  width = GlobalBuffer.bufMain.width;
+  radius = GlobalBuffer.bufMain.height;
+	
   GlobalBuffer.bufBG.drawCircle(width/2, height/2, 10);
   // draw numbers: seconds
   curDate = Date(Date.now());
