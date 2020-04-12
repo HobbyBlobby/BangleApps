@@ -2,7 +2,7 @@
   { "id": "boot",
     "name": "Bootloader",
     "icon": "bootloader.png",
-    "version":"0.13",
+    "version":"0.14",
     "description": "This is needed by Bangle.js to automatically load the clock, menu, widgets and settings",
     "tags": "tool,system",
     "type":"bootloader",
@@ -65,7 +65,7 @@
   { "id": "locale",
     "name": "Languages",
     "icon": "locale.png",
-    "version":"0.05",
+    "version":"0.06",
     "description": "Translations for different countries",
     "tags": "tool,system,locale,translate",
     "type": "locale",
@@ -78,12 +78,12 @@
   { "id": "welcome",
     "name": "Welcome",
     "icon": "app.png",
-    "version":"0.05",
+    "version":"0.06",
     "description": "Appears at first boot and explains how to use Bangle.js",
     "tags": "start,welcome",
     "allow_emulator":true,
     "storage": [
-      {"name":"welcome.js","url":"welcome.js"},
+      {"name":"welcome.boot.js","url":"boot.js"},
       {"name":"welcome.app.js","url":"app.js"},
       {"name":"welcome.settings.js","url":"settings.js"},
       {"name":"welcome.img","url":"app-icon.js","evaluate":true}
@@ -92,11 +92,12 @@
   { "id": "gbridge",
     "name": "Gadgetbridge",
     "icon": "app.png",
-    "version":"0.06",
+    "version":"0.08",
     "description": "The default notification handler for Gadgetbridge notifications from Android",
     "tags": "tool,system,android,widget",
+    "type":"widget",
     "storage": [
-      {"name":"gbridge.app.js","url":"app.js"},
+      {"name":"gbridge.settings.js","url":"settings.js"},
       {"name":"gbridge.img","url":"app-icon.js","evaluate":true},
       {"name":"gbridge.wid.js","url":"widget.js"}
     ]
@@ -118,7 +119,7 @@
   { "id": "setting",
     "name": "Settings",
     "icon": "settings.png",
-    "version":"0.10",
+    "version":"0.12",
     "description": "A menu for setting up Bangle.js",
     "tags": "tool,system",
     "storage": [
@@ -133,7 +134,7 @@
     "name": "Default Alarm",
     "shortName":"Alarms",
     "icon": "app.png",
-    "version":"0.05",
+    "version":"0.06",
     "description": "Set and respond to alarms",
     "tags": "tool,alarm,widget",
     "storage": [
@@ -317,9 +318,9 @@
   { "id": "files",
     "name": "App Manager",
     "icon": "files.png",
-    "version":"0.01",
+    "version":"0.02",
     "description": "Show currently installed apps, free space, and allow their deletion from the watch",
-    "tags": "tool,system",
+    "tags": "tool,system,files",
     "storage": [
       {"name":"files.app.js","url":"files.js"},
       {"name":"files.img","url":"files-icon.js","evaluate":true}
@@ -402,6 +403,7 @@
     "description": "Simple stopwatch with Lap Time logging to a JSON file",
     "tags": "health",
     "allow_emulator":true,
+    "readme": "README.md",
     "storage": [
       {"name":"swatch.app.js","url":"stopwatch.js"},
       {"name":"swatch.img","url":"stopwatch-icon.js","evaluate":true}
@@ -502,12 +504,13 @@
     "id": "ncstart",
     "name": "NCEU Startup",
     "icon": "start.png",
-    "version":"0.02",
+    "version":"0.03",
     "description": "NodeConfEU 2019 'First Start' Sequence",
     "tags": "start,welcome",
     "storage": [
-      {"name":"welcome.js","url":"welcome.js"},
       {"name":"ncstart.app.js","url":"start.js"},
+      {"name":"ncstart.boot.js","url":"boot.js"},
+      {"name":"ncstart.settings.js","url":"settings.js"},
       {"name":"ncstart.img","url":"start-icon.js","evaluate":true},
       {"name":"nc-bangle.img","url":"start-bangle.js","evaluate":true},
       {"name":"nc-nceu.img","url":"start-nceu.js","evaluate":true},
@@ -719,7 +722,7 @@
     "id": "gpsinfo",
     "name": "GPS Info",
     "icon": "gps-info.png",
-    "version":"0.02",
+    "version":"0.03",
     "description": "An application that displays information about altitude, lat/lon, satellites and time",
     "tags": "gps",
     "type": "app",
@@ -783,12 +786,13 @@
   { "id": "widpedom",
     "name": "Pedometer widget",
     "icon": "widget.png",
-    "version":"0.08",
+    "version":"0.10",
     "description": "Daily pedometer widget",
     "tags": "widget",
     "type":"widget",
     "storage": [
-      {"name":"widpedom.wid.js","url":"widget.js"}
+      {"name":"widpedom.wid.js","url":"widget.js"},
+      {"name":"widpedom.settings.js","url":"settings.js"}
     ]
   },
   { "id": "berlinc",
@@ -846,7 +850,7 @@
     "id": "pipboy",
     "name": "Pipboy",
     "icon": "app.png",
-    "version": "0.02",
+    "version": "0.03",
     "description": "Pipboy themed clock",
     "tags": "clock",
     "type":"clock",
@@ -940,11 +944,12 @@
   { "id": "marioclock",
     "name": "Mario Clock",
     "icon": "marioclock.png",
-    "version":"0.07",
-    "description": "Animated Mario clock, jumps to change the time! Swipe right to change the character, and swipe left to toggle night mode. Press BTN1 to jump.",
+    "version":"0.09",
+    "description": "Animated retro Mario clock, with Gameboy style 8-bit grey-scale graphics.",
     "tags": "clock,mario,retro",
     "type": "clock",
     "allow_emulator":true,
+    "readme": "README.md",
     "storage": [
       {"name":"marioclock.app.js","url":"marioclock-app.js"},
       {"name":"marioclock.img","url":"marioclock-icon.js","evaluate":true}
@@ -1060,7 +1065,7 @@
     "name": "Touch Launcher",
     "shortName":"Menu",
     "icon": "app.png",
-    "version":"0.04",
+    "version":"0.05",
     "description": "Touch enable left to right launcher.",
     "tags": "tool,system,launcher",
     "type":"launch",
@@ -1118,6 +1123,69 @@
     "storage": [
       {"name":"minionclk.app.js","url":"app.js"},
       {"name":"minionclk.img","url":"app-icon.js","evaluate":true}
+    ]
+  },
+  { "id": "openstmap",
+    "name": "OpenStreetMap",
+    "shortName":"OpenStMap",
+    "icon": "app.png",
+    "version":"0.02",
+    "description": "[BETA] Loads map tiles from OpenStreetMap onto your Bangle.js and displays a map of where you are",
+    "tags": "outdoors,gps",
+    "custom": "custom.html",
+    "storage": [
+      {"name":"openstmap.app.js","url":"app.js"},
+      {"name":"openstmap.img","url":"app-icon.js","evaluate":true}
+    ]
+  },
+  { "id": "tabata",
+    "name": "Tabata",
+    "shortName": "Tabata - Control High-Intensity Interval Training",
+    "icon": "tabata.png",
+    "version":"0.01",
+    "description": "Control high-intensity interval training (according to tabata: https://en.wikipedia.org/wiki/Tabata_method).",
+    "tags": "workout,health",
+    "storage": [
+      {"name":"tabata.app.js","url":"tabata.js"},
+      {"name":"tabata.img","url":"tabata-icon.js","evaluate":true}
+    ]
+  },
+  { "id": "custom",
+    "name": "Custom Boot Code ",
+    "icon": "custom.png",
+    "version":"0.01",
+    "description": "Add code you want to run at boot time",
+    "tags": "tool,system",
+    "type": "bootloader",
+    "custom":"custom.html",
+    "storage": [
+       {"name":"custom"}
+    ]
+  },
+  { "id": "devstopwatch",
+  "name": "Dev Stopwatch",
+  "shortName":"Dev Stopwatch",
+  "icon": "app.png",
+  "version":"0.01",
+  "description": "Stopwatch with 5 laps supported (cyclically replaced)",
+  "tags": "stopwatch, chrono, timer, chronometer",
+  "allow_emulator":true,
+  "storage": [
+    {"name":"devstopwatch.app.js","url":"app.js"},
+    {"name":"devstopwatch.img","url":"app-icon.js","evaluate":true}
+  ]
+  },
+  { "id": "batchart",
+    "name": "Battery Chart",
+    "shortName":"BatChart",
+    "icon": "app.png",
+    "version":"0.03",
+    "description": "A widget and an app for recording and visualizing battery percentage over time.",
+    "tags": "app,widget,battery,time,record,chart,tool",
+    "storage": [
+      {"name":"batchart.wid.js","url":"widget.js"},
+      {"name":"batchart.app.js","url":"app.js"},
+      {"name":"batchart.img","url":"app-icon.js","evaluate":true}
     ]
   }
 ]

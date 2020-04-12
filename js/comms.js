@@ -8,13 +8,18 @@ reset : (opt) => new Promise((resolve,reject) => {
     setTimeout(resolve,500);
   });
 }),
-uploadApp : (app,skipReset) => {
+uploadApp : (app,skipReset) => { // expects an apps.json structure (i.e. with `storage`)
   Progress.show({title:`Uploading ${app.name}`,sticky:true});
   return AppInfo.getFiles(app, httpGet).then(fileContents => {
     return new Promise((resolve,reject) => {
       console.log("uploadApp",fileContents.map(f=>f.name).join(", "));
       var maxBytes = fileContents.reduce((b,f)=>b+f.content.length, 0)||1;
       var currentBytes = 0;
+
+      var appInfoFileName = app.id+".info";
+      var appInfoFile = fileContents.find(f=>f.name==appInfoFileName);
+      if (!appInfoFile) reject(`${appInfoFileName} not found`);
+      var appInfo = JSON.parse(appInfoFile.content);
 
       // Upload each file one at a time
       function doUploadFiles() {
@@ -23,7 +28,7 @@ uploadApp : (app,skipReset) => {
           Puck.write(`\x10E.showMessage('Hold BTN3\\nto reload')\n`,(result) => {
             Progress.hide({sticky:true});
             if (result===null) return reject("");
-            resolve(app);
+            resolve(appInfo);
           });
           return;
         }
@@ -79,11 +84,11 @@ getInstalledApps : () => {
     });
   });
 },
-removeApp : app => { // expects an app structure
+removeApp : app => { // expects an appid.info structure (i.e. with `files`)
+  if (app.files === '') return Promise.resolve(); // nothing to erase
   Progress.show({title:`Removing ${app.name}`,sticky:true});
-  var storage = [{name:app.id+".info"}].concat(app.storage);
-  var cmds = storage.map(file=>{
-    return `\x10require("Storage").erase(${toJS(file.name)});\n`;
+  var cmds = app.files.split(',').map(file=>{
+    return `\x10require("Storage").erase(${toJS(file)});\n`;
   }).join("");
   console.log("removeApp", cmds);
   return Comms.reset().then(new Promise((resolve,reject) => {
