@@ -1,21 +1,37 @@
-GlobalBuffer = require("buffer.js");
+//GlobalBuffer = require("buffer.js");
+GlobalBuffer = require("https://github.com/HobbyBlobby/BangleApps/blob/master/apps/flhome/buffer.js");
 
 var HomeScreen = {
     "mode": "single", // can also be cycle
     "currentScreen": 0, // start with screen 0
+    "screen": null, // contains the module code
     "screenList":  [
-      require("analogclock.js"),
-      require("digitalclock.js")
+      "analogclock.js",
+      "digitalclock.js"
     ],
     "timerID": null,
     "cycleTimer": null
 };
+
+function unloadScreen(sModule) {
+  delete HomeScreen.screen;
+  HomeScreen.screen = null;
+}
+
+function loadScreen(sModule) {
+  if(sModule == "analogclock.js") {
+      HomeScreen.screen = require("https://raw.githubusercontent.com/HobbyBlobby/BangleApps/master/apps/flhome/analogclock.js");
+  } else {
+    HomeScreen.screen = require("https://raw.githubusercontent.com/HobbyBlobby/BangleApps/master/apps/flhome/digitalclock.js");
+  }
+}
 
 function nextScreen(dir) {
     if(HomeScreen.timerID) {
         clearInterval(HomeScreen.timerID);
         HomeScreen.timerID = null;
     }
+    unloadScreen(HomeScreen.screenList[HomeScreen.currentScreen]);
     if(dir == 1) {
         HomeScreen.currentScreen++;
         if(HomeScreen.currentScreen >= HomeScreen.screenList.length) {
@@ -27,13 +43,14 @@ function nextScreen(dir) {
             HomeScreen.currentScreen = HomeScreen.screenList.length - 1;
         }
     }
+    loadScreen(HomeScreen.screenList[HomeScreen.currentScreen]);
     HomeScreen.timerID = setInterval(draw, 1000);    
 }
 
 function draw() {
     GlobalBuffer.clear();
-    if(HomeScreen.screenList[HomeScreen.currentScreen]) {
-        HomeScreen.screenList[HomeScreen.currentScreen].draw();
+    if(HomeScreen.screen) {
+        HomeScreen.screen.draw();
     }
     // TODO draw screen status (dots 1 of 3)
     GlobalBuffer.flip();
@@ -53,6 +70,7 @@ function init() {
     Bangle.loadWidgets();
     Bangle.drawWidgets();
 
+    loadScreen(HomeScreen.screenList[0]);
     HomeScreen.timerID = setInterval(draw, 1000);
     draw();
 }
