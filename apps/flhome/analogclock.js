@@ -58,9 +58,9 @@ function tickNumber(hour, distance) {
 function drawHands() {
   if (!Bangle.isLCDOn()) return;
   // inner circle
-  height = GlobalBuffer.bufMain.height;
-  width = GlobalBuffer.bufMain.width;
-  radius = GlobalBuffer.bufMain.height;
+  height = GlobalBuffer.bufMain.getHeight();
+  width = GlobalBuffer.bufMain.getWidth();
+  radius = GlobalBuffer.bufMain.getHeight();
 	
   GlobalBuffer.bufBG.drawCircle(width/2, height/2, 10);
   // draw numbers: seconds
