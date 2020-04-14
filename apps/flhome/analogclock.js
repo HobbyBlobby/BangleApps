@@ -65,14 +65,17 @@ function drawHands() {
   // draw numbers: seconds
   curDate = Date(Date.now());
   seconds = curDate.getSeconds();
-  tickBelow = Math.floor(seconds / 60 * 12);
-  tickAbove = Math.ceil(seconds / 60 * 12);
-  if(tickAbove == tickBelow) {
-	++tickAbove;
-	tickMark(tickBelow--, radius);
+  for(var i = 0; i < 12; i++) {
+    tickMark(i, radius);
   }
-  tickMark(tickBelow, radius);
-  tickMark(tickAbove, radius);  
+//  tickBelow = Math.floor(seconds / 60 * 12);
+//  tickAbove = Math.ceil(seconds / 60 * 12);
+//  if(tickAbove == tickBelow) {
+//	++tickAbove;
+//	tickMark(tickBelow--, radius);
+//  }
+//  tickMark(tickBelow, radius);
+//  tickMark(tickAbove, radius);  
   // draw numbers: minutes
   minutes = curDate.getMinutes();
   tickMinute = Math.round(minutes / 60 * 12);
