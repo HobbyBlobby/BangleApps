@@ -58,7 +58,7 @@ function drawHands() {
   if (!Bangle.isLCDOn()) return;
   height = GlobalBuffer.bufMain.getHeight();
   width = GlobalBuffer.bufMain.getWidth();
-  radius = GlobalBuffer.bufMain.getHeight() / 2.0;	
+  radius = GlobalBuffer.bufMain.getHeight() / 2.0 - 10;	
 	
   // inner circle
   GlobalBuffer.bufBG.drawCircle(width/2, height/2, 10);
