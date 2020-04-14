@@ -1,5 +1,5 @@
-//GlobalBuffer = require("buffer.js");
-GlobalBuffer = require("https://github.com/HobbyBlobby/BangleApps/blob/master/apps/flhome/buffer.js");
+GlobalBuffer = require("buffer.js");
+//GlobalBuffer = require("https://github.com/HobbyBlobby/BangleApps/blob/master/apps/flhome/buffer.js");
 
 var HomeScreen = {
     "mode": "single", // can also be cycle
@@ -19,11 +19,12 @@ function unloadScreen(sModule) {
 }
 
 function loadScreen(sModule) {
-  if(sModule == "analogclock.js") {
-      HomeScreen.screen = require("https://raw.githubusercontent.com/HobbyBlobby/BangleApps/master/apps/flhome/analogclock.js");
-  } else {
-    HomeScreen.screen = require("https://raw.githubusercontent.com/HobbyBlobby/BangleApps/master/apps/flhome/digitalclock.js");
-  }
+//  if(sModule == "analogclock.js") {
+//      HomeScreen.screen = require("https://raw.githubusercontent.com/HobbyBlobby/BangleApps/master/apps/flhome/analogclock.js");
+//  } else {
+//    HomeScreen.screen = //require("https://raw.githubusercontent.com/HobbyBlobby/BangleApps/master/apps/flhome/digitalclock.js");
+//  }
+  HomeScreen.screen = require(sModule);
 }
 
 function nextScreen(dir) {
@@ -31,7 +32,7 @@ function nextScreen(dir) {
         clearInterval(HomeScreen.timerID);
         HomeScreen.timerID = null;
     }
-    unloadScreen(HomeScreen.screenList[HomeScreen.currentScreen]);
+    var oldScreen = HomeScreen.screenList[HomeScreen.currentScreen];
     if(dir == 1) {
         HomeScreen.currentScreen++;
         if(HomeScreen.currentScreen >= HomeScreen.screenList.length) {
@@ -43,11 +44,14 @@ function nextScreen(dir) {
             HomeScreen.currentScreen = HomeScreen.screenList.length - 1;
         }
     }
+    if (!Bangle.isLCDOn()) return;
+    unloadScreen(HomeScreen.screenList[HomeScreen.currentScreen]);
     loadScreen(HomeScreen.screenList[HomeScreen.currentScreen]);
     HomeScreen.timerID = setInterval(draw, 1000);    
 }
 
 function draw() {
+    if (!Bangle.isLCDOn()) return;
     GlobalBuffer.clear();
     if(HomeScreen.screen) {
         HomeScreen.screen.draw();
@@ -57,11 +61,12 @@ function draw() {
 }
 
 function switchCycle() {
+    print("Switch");
     if(HomeScreen.cycleTimer) {
         clearInterval(HomeScreen.cycleTimer);
         HomeScreen.cycleTimer = null;
     } else {
-        HomeScreen.cycleTimer = setInterval(nextScreen(1), 3000);
+        HomeScreen.cycleTimer = setInterval(nextScreen, 8000, 1);
     }
 }
 
@@ -90,7 +95,7 @@ setWatch(Bangle.showLauncher, BTN2, {repeat:false,edge:"falling"});
 // switch to cycle mode when long pressing btn1
 setWatch(function(e){
     var isLong = (e.time-e.lastTime) > 2.0;
-    if(isLone) {
+    if(isLong) {
         switchCycle();
     }
 }, BTN1, {repeat:true, debounce:50, edge:"falling"});
