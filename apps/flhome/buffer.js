@@ -21,7 +21,6 @@ exports.flip = function () {
     //             height:bufHeighlight.getHeight(),
     //             buffer:bufHeighlight.buffer,
     //             transparent: 0},0,30);
-    g.flip();
 }
 
 exports.clear = function () {
