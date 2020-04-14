@@ -1,5 +1,3 @@
-Bangle.setLCDMode("doublebuffered");
-
 GlobalBuffer = require("buffer.js");
 //GlobalBuffer = require("https://github.com/HobbyBlobby/BangleApps/blob/master/apps/flhome/buffer.js");
 
