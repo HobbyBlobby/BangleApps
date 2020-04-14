@@ -8,9 +8,9 @@ var colHeighlight = {"R": 1.0, "G": 1.0, "B": 1.0};
 
 exports.flip = function () {
     g.setColor(colBG.R, colBG.G, colBG.B);
-    //g.drawImage({width:bufBG.getWidth(),
-    //             height:bufBG.getHeight(),
-    //             buffer:bufBG.buffer},0,30);
+    g.drawImage({width:bufBG.getWidth(),
+                 height:bufBG.getHeight(),
+                 buffer:bufBG.buffer},0,30);
     g.setColor(colMain.R, colMain.G, colMain.B);
     g.drawImage({width:bufMain.getWidth(),
                  height:bufMain.getHeight(),
