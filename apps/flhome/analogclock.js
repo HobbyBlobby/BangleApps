@@ -43,7 +43,6 @@ function tickMark(hour, distance) {
   points = rotateBy(points, angle * PI / 180);
   points = moveBy(points, width/2, height/2);
   GlobalBuffer.bufHeighlight.drawLine(points[0], points[1], points[2], points[3]);
-  print("height = " + height);
 }
 
 function tickNumber(hour, distance) {
