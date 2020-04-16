@@ -27,7 +27,8 @@ exports.flip = function () {
     g.drawImage({width:buf.getWidth(),
                  height:buf.getHeight(),
                  buffer:buf.buffer,
-                 palette:palette},0,30);
+                 palette:palette,
+                 bpp:2},0,30);
 }
 
 exports.clear = function () {
