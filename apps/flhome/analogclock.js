@@ -42,7 +42,8 @@ function tickMark(hour, distance) {
   points = [0, -distance, 0, -distance+5];
   points = rotateBy(points, angle * PI / 180);
   points = moveBy(points, width/2, height/2);
-  GlobalBuffer.bufHeighlight.drawLine(points[0], points[1], points[2], points[3]);
+  GlobalBuffer.buf.setColor(3);
+  GlobalBuffer.buf.drawLine(points[0], points[1], points[2], points[3]);
 }
 
 function tickNumber(hour, distance) {
@@ -50,18 +51,20 @@ function tickNumber(hour, distance) {
   points = [0, -distance+10, 0];
   points = rotateBy(points, angle * PI / 180);
   points = moveBy(points, width/2, height/2);
-  GlobalBuffer.bufHeighlight.setFontVector(12);
-  GlobalBuffer.bufHeighlight.drawString(hour.toString(), points[0], points[1]);
+  GlobalBuffer.buf.setColor(3);
+  GlobalBuffer.buf.setFontVector(12);
+  GlobalBuffer.buf.drawString(hour.toString(), points[0], points[1]);
 }
 
 function drawHands() {
   if (!Bangle.isLCDOn()) return;
-  height = GlobalBuffer.bufMain.getHeight();
-  width = GlobalBuffer.bufMain.getWidth();
-  radius = GlobalBuffer.bufMain.getHeight() / 2.0;	
+  height = GlobalBuffer.buf.getHeight();
+  width = GlobalBuffer.buf.getWidth();
+  radius = GlobalBuffer.buf.getHeight() / 2.0;	
 	
   // inner circle
-  GlobalBuffer.bufBG.drawCircle(width/2, height/2, 10);
+  GlobalBuffer.buf.setColor(1);
+  GlobalBuffer.buf.drawCircle(width/2, height/2, 10);
   // draw numbers: seconds
   curDate = Date(Date.now());
   seconds = curDate.getSeconds();
@@ -119,10 +122,13 @@ function drawHand(angle, handWidth, relHandLength, fill) {
   points = moveBy(points, width/2, height/2);
 
   if(fill) {
-    GlobalBuffer.bufMain.fillPoly(points, true);
-    GlobalBuffer.bufHeighlight.drawPoly(points, true);
+    GlobalBuffer.buf.setColor(2);
+    GlobalBuffer.buf.fillPoly(points, true);
+    GlobalBuffer.buf.setColor(3);
+    GlobalBuffer.buf.drawPoly(points, true);
   } else {
-    GlobalBuffer.bufMain.drawPoly(points, true);
+    GlobalBuffer.buf.setColor(2);
+    GlobalBuffer.buf.drawPoly(points, true);
   }
 }
 
