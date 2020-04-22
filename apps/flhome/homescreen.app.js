@@ -14,13 +14,14 @@ var HomeScreen = {
 };
 
 function unloadScreen(sModule) {
-  delete HomeScreen.screen;
+  Modules.removeCached(sModule);
+  delete HomeScreen.screen; 
   HomeScreen.screen = null;
 }
 
 function loadScreen(sModule) {
 //  if(sModule == "analogclock.js") {
-//      HomeScreen.screen = require("https://raw.githubusercontent.com/HobbyBlobby/BangleApps/master/apps/flhome/analogclock.js");
+//      HomeScreen.screen = //require("https://raw.githubusercontent.com/HobbyBlobby/BangleApps/master/apps/flhome/analogclock.js");
 //  } else {
 //    HomeScreen.screen = //require("https://raw.githubusercontent.com/HobbyBlobby/BangleApps/master/apps/flhome/digitalclock.js");
 //  }
@@ -52,11 +53,14 @@ function nextScreen(dir) {
 
 function draw() {
     if (!Bangle.isLCDOn()) return;
+    print(process.memory());
     GlobalBuffer.clear();
     if(HomeScreen.screen) {
         HomeScreen.screen.draw();
     }
     // TODO draw screen status (dots 1 of 3)
+    GlobalBuffer.buf.setColor(3);
+    GlobalBuffer.buf.drawString(rocess.memory().free.toString(), 10,10);
     GlobalBuffer.flip();
 }
 
