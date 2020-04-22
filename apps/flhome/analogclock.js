@@ -95,7 +95,7 @@ function drawHands() {
   // draw numbers: hours
   var hours = curDate.getHours();
   if(minutes > 30) {
-      hours++;
+      hours += 1;
   }
   if(hours > 12) {
 	hours -=12;
