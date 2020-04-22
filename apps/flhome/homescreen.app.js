@@ -82,7 +82,7 @@ function init() {
 
 Bangle.on('lcdPower',function(on) {
   if (on)
-    drawFunction();
+    draw();
 });
 
 //dir left = -1, right = 1
