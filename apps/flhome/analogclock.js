@@ -49,12 +49,12 @@ function rotateAndMove(points, angle, dx, dy) {
 var tickMap = {};
 function tickMark(hour, distance) {
   var points = [0, -distance, 0, -distance+5];
-  if(tickMap.hour) {
+  if(tickMap[hour]) {
     points = tickMap.hour;
   } else {
     var angle = 360/12 * hour;
     points = rotateAndMove(points, angle*PI / 180.0, width/2.0, height/2.0);
-    tickMap.hour = points;
+    tickMap[hour] = points;
   }
   GlobalBuffer.buf.setColor(3);
   GlobalBuffer.buf.drawLine(points[0], points[1], points[2], points[3]);
