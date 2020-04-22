@@ -90,15 +90,16 @@ Bangle.on('swipe', function(dir) {
   nextScreen(dir);
 });
 
-// Show launcher when middle button pressed
-setWatch(Bangle.showLauncher, BTN2, {repeat:false,edge:"falling"});
 // switch to cycle mode when long pressing btn1
-setWatch(function(e){
-    var isLong = (e.time-e.lastTime) > 2.0;
-    if(isLong) {
-        switchCycle();
-    }
-}, BTN1, {repeat:true, debounce:50, edge:"falling"});
+// setWatch(function(e){
+//     var isLong = (e.time-e.lastTime) > 2.0;
+//     if(isLong) {
+//         switchCycle();
+//     }
+// }, BTN1, {repeat:true, debounce:50, edge:"falling"});
 
 // init the app
 init();
+
+// Show launcher when middle button pressed
+setWatch(Bangle.showLauncher, BTN2, {repeat:false,edge:"falling"});
