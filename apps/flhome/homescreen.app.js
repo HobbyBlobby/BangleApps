@@ -61,7 +61,7 @@ function draw() {
     }
     // TODO draw screen status (dots 1 of 3)
     GlobalBuffer.buf.setColor(3);
-    GlobalBuffer.buf.drawString(rocess.memory().free.toString(), 10,10);
+    GlobalBuffer.buf.drawString(process.memory().free.toString(), 10,10);
     GlobalBuffer.flip();
 }
 
