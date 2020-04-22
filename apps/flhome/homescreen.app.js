@@ -81,8 +81,8 @@ function init() {
 }
 
 function showLauncher() {
+    clearInterval(HomeScreen.timerID);
     delete GlobalBuffer.buf;
-    delete GlobalBuffer;
     Bangle.showLauncher();
 }
 
