@@ -80,10 +80,10 @@ function init() {
     draw();
 }
 
-Bangle.on('lcdPower',function(on) {
-  if (on)
-    draw();
-});
+// Bangle.on('lcdPower',function(on) {
+//   if (on)
+//     draw();
+// });
 
 //dir left = -1, right = 1
 Bangle.on('swipe', function(dir) {
