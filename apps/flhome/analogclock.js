@@ -6,30 +6,30 @@ var radius = 0;
 var PI = Math.acos(0) * 2;
 
 function moveBy(points, dx, dy) {
-  newPoints = [];
+  var newPoints = [];
   var isX = true;
   for(var i = 0; i < points.length; ++i) {
 	if(isX) {
-  	newPoints.push(points[i] + dx);
-  	isX = false;
+  	  newPoints.push(points[i] + dx);
+  	  isX = false;
 	} else {
-  	newPoints.push(points[i] + dy);
-  	isX = true;
+  	  newPoints.push(points[i] + dy);
+  	  isX = true;
 	}
   }
   return newPoints;
 }
 
 function rotateBy(points, angle) {
-  newPoints = [];
+  var newPoints = [];
   var isX = true;
   for(var i = 0; i < points.length; ++i) {
 	if(isX) {
-  	newX = points[i] * Math.cos(angle) - points[i+1] * Math.sin(angle);
+  	var newX = points[i] * Math.cos(angle) - points[i+1] * Math.sin(angle);
   	newPoints.push(newX);
   	isX = false;
 	} else {
-  	newY = points[i-1] * Math.sin(angle) + points[i] * Math.cos(angle);
+  	var newY = points[i-1] * Math.sin(angle) + points[i] * Math.cos(angle);
   	newPoints.push(newY);
   	isX = true;
 	}
@@ -37,20 +37,33 @@ function rotateBy(points, angle) {
   return newPoints;
 }
 
+function rotateAndMove(points, angle, dx, dy) {
+  for(var i = 0; i < points.length; i += 2) {
+  	  var x = points[i] * Math.cos(angle) - points[i+1] * Math.sin(angle);
+  	  points[i+1] = points[i] * Math.sin(angle) + points[i+1] * Math.cos(angle);
+      points[i] = x;
+  }
+  return points;
+}
+
+var tickMap = {};
 function tickMark(hour, distance) {
-  angle = 360/12 * hour;
-  points = [0, -distance, 0, -distance+5];
-  points = rotateBy(points, angle * PI / 180);
-  points = moveBy(points, width/2, height/2);
+  var points = [0, -distance, 0, -distance+5];
+  if(tickMap.hour) {
+    points = tickMap.hour;
+  } else {
+    var angle = 360/12 * hour;
+    points = rotateAndMove(points, angle*PI / 180.0, width/2.0, height/2.0);
+    tickMap.hour = points;
+  }
   GlobalBuffer.buf.setColor(3);
   GlobalBuffer.buf.drawLine(points[0], points[1], points[2], points[3]);
 }
 
 function tickNumber(hour, distance) {
-  angle = 360/12 * (hour - 0.00);
-  points = [0, -distance+10, 0];
-  points = rotateBy(points, angle * PI / 180);
-  points = moveBy(points, width/2, height/2);
+  var angle = 360/12 * (hour - 0.00);
+  var points = [0, -distance+10, 0];
+  points = rotateAndMove(points, angle*PI / 180.0, width/2.0, height/2.0);
   GlobalBuffer.buf.setColor(3);
   GlobalBuffer.buf.setFontVector(12);
   GlobalBuffer.buf.drawString(hour.toString(), points[0], points[1]);
@@ -66,32 +79,28 @@ function drawHands() {
   GlobalBuffer.buf.setColor(1);
   GlobalBuffer.buf.drawCircle(width/2, height/2, 10);
   // draw numbers: seconds
-  curDate = Date(Date.now());
-  seconds = curDate.getSeconds();
+  var curDate = Date(Date.now());
+  var seconds = curDate.getSeconds();
   for(var i = 0; i < 12; i++) {
     tickMark(i, radius);
   }
-//  tickBelow = Math.floor(seconds / 60 * 12);
-//  tickAbove = Math.ceil(seconds / 60 * 12);
-//  if(tickAbove == tickBelow) {
-//	++tickAbove;
-//	tickMark(tickBelow--, radius);
-//  }
-//  tickMark(tickBelow, radius);
-//  tickMark(tickAbove, radius);  
+ 
   // draw numbers: minutes
-  minutes = curDate.getMinutes();
-  tickMinute = Math.round(minutes / 60 * 12);
-  if(tickMinute == 0) {
-      tickMinute = 12;
-  }
-  tickNumber(tickMinute, radius);
+  var minutes = curDate.getMinutes();
+//   var tickMinute = Math.round(minutes / 60 * 12);
+//   if(tickMinute == 0) {
+//       tickMinute = 12;
+//   }
+//   tickNumber(tickMinute, radius);
   // draw numbers: hours
-  hours = curDate.getHours();
+  var hours = curDate.getHours();
+  if(minutes > 30) {
+      hours++;
+  }
   if(hours > 12) {
 	hours -=12;
   }
-  tickHour = Math.round(hours);
+  var tickHour = Math.round(hours);
   if(tickHour == 0) {
       tickHour = 12;
   }
@@ -118,8 +127,7 @@ function drawHand(angle, handWidth, relHandLength, fill) {
   var backY = -handLength * 0.8;
 
   var points = [centerX, centerY, gutX, gutY, tipX, tipY, backX, backY];
-  points = rotateBy(points, angle * PI / 180);
-  points = moveBy(points, width/2, height/2);
+  points = rotateAndMove(points, angle * PI / 180.0, width/2.0, height/2.0);
 
   if(fill) {
     GlobalBuffer.buf.setColor(2);
@@ -134,7 +142,5 @@ function drawHand(angle, handWidth, relHandLength, fill) {
 
 
 exports.draw = function () {
-//        GlobalBuffer.bufMain.drawString("Hello Analog", 10, GlobalBuffer.bufMain.height / 2);
-//        GlobalBuffer.bufHeighlight.drawString("Second Text", 20, GlobalBuffer.bufHeighlight.height/2+ 50);
         drawHands();
-    };
+};
