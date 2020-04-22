@@ -10,6 +10,10 @@ colorSchemes.push(new Uint16Array([0, 0x8A08, 0xE861, 0xFFFF]));
 colorSchemes.push(new Uint16Array([0, 0x3169, 0x38D4, 0xFFFF]));
 var palette = colorSchemes[0];
 
+exports.setColorScheme = function(index) {
+    palette = colorSchemes[index % colorSchemes.length];
+}
+
 // var colBG = {"R": 0.3, "G": 0.3, "B": 0.3};
 // var colMain = {"R": 0.8, "G": 1.0, "B": 0.8};
 // var colHeighlight = {"R": 1.0, "G": 1.0, "B": 1.0};
