@@ -39,8 +39,8 @@ function rotateBy(points, angle) {
 
 function rotateAndMove(points, angle, dx, dy) {
   for(var i = 0; i < points.length; i += 2) {
-  	  var x = points[i] * Math.cos(angle) - points[i+1] * Math.sin(angle);
-  	  points[i+1] = points[i] * Math.sin(angle) + points[i+1] * Math.cos(angle);
+  	  var x = points[i] * Math.cos(angle) - points[i+1] * Math.sin(angle) + dx;
+  	  points[i+1] = points[i] * Math.sin(angle) + points[i+1] * Math.cos(angle) + dy;
       points[i] = x;
   }
   return points;
