@@ -82,6 +82,7 @@ function init() {
 
 function showLauncher() {
     delete GlobalBuffer.buf;
+    delete GlobalBuffer;
     Bangle.showLauncher();
 }
 
