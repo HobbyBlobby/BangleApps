@@ -2,7 +2,7 @@
 // var bufMain = Graphics.createArrayBuffer(240,210,1,{msb:true});
 // var bufHeighlight = Graphics.createArrayBuffer(240,210,1,{msb:true});
 
-var buf = Graphics.createArrayBuffer(200,170,2,{msb:true});
+var buf = Graphics.createArrayBuffer(220,190,2,{msb:true});
 // var palette = new Uint16Array([0, 0x6B6D, 0xAFFB, 0xFFFF]);
 var colorSchemes = [];
 colorSchemes.push(new Uint16Array([0, 0x4AE7, 0x7681, 0xFFFF]));
@@ -37,7 +37,7 @@ exports.flip = function () {
                  height:buf.getHeight(),
                  buffer:buf.buffer,
                  palette:palette,
-                 bpp:2},0,30);
+                 bpp:2},10,30);
 }
 
 exports.clear = function () {
