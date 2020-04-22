@@ -85,7 +85,7 @@ function init() {
     draw();
 }
 
-function showLauncher() {
+function loadBangleLauncher() {
     clearInterval(HomeScreen.timerID);
     delete GlobalBuffer;
     delete HomeScreen;
@@ -115,4 +115,4 @@ Bangle.on('swipe', function(dir) {
 init();
 
 // Show launcher when middle button pressed
-setWatch(showLauncher, BTN2, {repeat:false,edge:"falling"});
+setWatch(loadBangleLauncher, BTN2, {repeat:false,edge:"falling"});
