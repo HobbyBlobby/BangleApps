@@ -5,37 +5,37 @@ var radius = 0;
 
 var PI = Math.acos(0) * 2;
 
-function moveBy(points, dx, dy) {
-  var newPoints = [];
-  var isX = true;
-  for(var i = 0; i < points.length; ++i) {
-	if(isX) {
-  	  newPoints.push(points[i] + dx);
-  	  isX = false;
-	} else {
-  	  newPoints.push(points[i] + dy);
-  	  isX = true;
-	}
-  }
-  return newPoints;
-}
-
-function rotateBy(points, angle) {
-  var newPoints = [];
-  var isX = true;
-  for(var i = 0; i < points.length; ++i) {
-	if(isX) {
-  	var newX = points[i] * Math.cos(angle) - points[i+1] * Math.sin(angle);
-  	newPoints.push(newX);
-  	isX = false;
-	} else {
-  	var newY = points[i-1] * Math.sin(angle) + points[i] * Math.cos(angle);
-  	newPoints.push(newY);
-  	isX = true;
-	}
-  }
-  return newPoints;
-}
+// function moveBy(points, dx, dy) {
+//   var newPoints = [];
+//   var isX = true;
+//   for(var i = 0; i < points.length; ++i) {
+// 	if(isX) {
+//   	  newPoints.push(points[i] + dx);
+//   	  isX = false;
+// 	} else {
+//   	  newPoints.push(points[i] + dy);
+//   	  isX = true;
+// 	}
+//   }
+//   return newPoints;
+// }
+// 
+// function rotateBy(points, angle) {
+//   var newPoints = [];
+//   var isX = true;
+//   for(var i = 0; i < points.length; ++i) {
+// 	if(isX) {
+//   	var newX = points[i] * Math.cos(angle) - points[i+1] * Math.sin(angle);
+//   	newPoints.push(newX);
+//   	isX = false;
+// 	} else {
+//   	var newY = points[i-1] * Math.sin(angle) + points[i] * Math.cos(angle);
+//   	newPoints.push(newY);
+//   	isX = true;
+// 	}
+//   }
+//   return newPoints;
+// }
 
 function rotateAndMove(points, angle, dx, dy) {
   for(var i = 0; i < points.length; i += 2) {
