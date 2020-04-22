@@ -7,12 +7,12 @@ function showTime() {
   GlobalBuffer.buf.setColor(3);
   GlobalBuffer.buf.drawString(hours + ":" + minutes + ":" + seconds, 20,30);
 
-  GlobalBuffer.buf.setFontVector(10);
+  GlobalBuffer.buf.setFontVector(20);
   var year = '' + curDate.getFullYear();
   var month = ('00' + (curDate.getMonth() + 1)).slice(-2);
   var day = ('00' + curDate.getDate()).slice(-2);
   GlobalBuffer.buf.setColor(2);
-  GlobalBuffer.buf.drawString(day + "." + month + "." + year, 90, 100);
+  GlobalBuffer.buf.drawString(day + "." + month + "." + year, 45, 100);
 }
 
 
