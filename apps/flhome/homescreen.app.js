@@ -88,9 +88,11 @@ function init() {
 function showLauncher() {
     clearInterval(HomeScreen.timerID);
     delete GlobalBuffer.buf;
-    Modules.removeAllCached();
+    Modules.removeCached("buffer.js");
+    Modules.removeCached("analogclock.js");
+    Modules.removeCached("digitalclock.js");
     g.clear();
-    g.drawString(process.memory().free.toString(), 10,10);
+    g.drawString(process.memory().free.toString(), 50,50);
     
 //     Bangle.showLauncher();
 }
