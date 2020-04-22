@@ -14,7 +14,7 @@ var HomeScreen = {
 };
 
 function unloadScreen(sModule) {
-  Modules.removeCached(sModule);
+  //Modules.removeCached(sModule);
   delete HomeScreen.screen; 
   HomeScreen.screen = null;
 }
@@ -25,7 +25,7 @@ function loadScreen(sModule) {
 //  } else {
 //    HomeScreen.screen = //require("https://raw.githubusercontent.com/HobbyBlobby/BangleApps/master/apps/flhome/digitalclock.js");
 //  }
-  Modules.addCached(sModule, sModule) ;
+  //Modules.addCached(sModule, sModule) ;
   HomeScreen.screen = require(sModule);
 }
 
