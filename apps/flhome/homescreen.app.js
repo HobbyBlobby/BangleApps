@@ -54,7 +54,7 @@ function nextScreen(dir) {
 
 function draw() {
     if (!Bangle.isLCDOn()) return;
-    print(process.memory());
+//     print(process.memory());
     GlobalBuffer.clear();
     if(HomeScreen.screen) {
         HomeScreen.screen.draw();
@@ -87,7 +87,7 @@ function init() {
 
 function showLauncher() {
     clearInterval(HomeScreen.timerID);
-    delete GlobalBuffer.buf;
+    Modules.removeAllCached()
     Bangle.showLauncher();
 }
 
