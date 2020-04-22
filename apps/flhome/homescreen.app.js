@@ -1,4 +1,4 @@
-GlobalBuffer = require("buffer.js");
+var GlobalBuffer = require("buffer.js");
 //GlobalBuffer = require("https://github.com/HobbyBlobby/BangleApps/blob/master/apps/flhome/buffer.js");
 
 var HomeScreen = {
