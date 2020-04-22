@@ -87,8 +87,12 @@ function init() {
 
 function showLauncher() {
     clearInterval(HomeScreen.timerID);
-    Modules.removeAllCached()
-    Bangle.showLauncher();
+    delete GlobalBuffer.buf;
+    Modules.removeAllCached();
+    g.clear();
+    g.drawString(process.memory().free.toString(), 10,10);
+    
+//     Bangle.showLauncher();
 }
 
 // Bangle.on('lcdPower',function(on) {

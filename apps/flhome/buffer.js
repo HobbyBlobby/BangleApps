@@ -2,7 +2,7 @@
 // var bufMain = Graphics.createArrayBuffer(240,210,1,{msb:true});
 // var bufHeighlight = Graphics.createArrayBuffer(240,210,1,{msb:true});
 
-var buf = Graphics.createArrayBuffer(240,210,2,{msb:true});
+var buf = Graphics.createArrayBuffer(200,170,2,{msb:true});
 // var palette = new Uint16Array([0, 0x6B6D, 0xAFFB, 0xFFFF]);
 var colorSchemes = [];
 colorSchemes.push(new Uint16Array([0, 0x4AE7, 0x7681, 0xFFFF]));
