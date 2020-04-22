@@ -90,7 +90,7 @@ function showLauncher() {
     delete GlobalBuffer;
     delete HomeScreen;
     
-//     Bangle.showLauncher();
+    Bangle.showLauncher();
 }
 
 // Bangle.on('lcdPower',function(on) {
