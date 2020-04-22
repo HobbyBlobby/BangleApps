@@ -85,6 +85,9 @@ function drawHands() {
     tickMark(i, radius);
   }
  
+  // draw numbers: minutes
+  var minutes = curDate.getMinutes();
+  // draw numbers: hours
   var hours = curDate.getHours();
   if(hours > 12) {
 	hours -=12;
@@ -95,7 +98,7 @@ function drawHands() {
   }
   tickNumber(tickHour, radius);
   tickNumber(tickHour+1, radius);
-  
+
   drawHand(seconds/60 * 360, 1, 90, false);
   drawHand(minutes/60 * 360, 4, 80, true);
   drawHand(hours/12 * 360 + 360/(12*60)*minutes, 8, 60, true);
