@@ -80,6 +80,11 @@ function init() {
     draw();
 }
 
+function showLauncher() {
+    delete GlobalBuffer.buf;
+    Bangle.showLauncher();
+}
+
 // Bangle.on('lcdPower',function(on) {
 //   if (on)
 //     draw();
@@ -102,4 +107,4 @@ Bangle.on('swipe', function(dir) {
 init();
 
 // Show launcher when middle button pressed
-setWatch(Bangle.showLauncher, BTN2, {repeat:false,edge:"falling"});
+setWatch(showLauncher, BTN2, {repeat:false,edge:"falling"});
