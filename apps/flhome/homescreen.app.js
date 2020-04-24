@@ -99,6 +99,8 @@ function drawAnalog() {
   //g.drawString(process.memory().free.toString(), 40, 10);
   //g.setColor(palette[3]);
   if(lastHour != date.getHours()) {
+    g.setColor(0);
+    g.fillCircle(centerX, centerY, radius);
     for(var i = 0; i < 12; i++) {
       if(date.getHours() % 12 == i) {
         var x = radius * Math.sin(i/12 * 2*PI) + centerX;
@@ -115,15 +117,17 @@ function drawAnalog() {
   }
   lastHour = date.getHours();
   //g.drawCircle(centerX, centerY, radius);
-  clearHand(handSec, lastAngle.sec);
-  clearHand(handMin, lastAngle.min);
-  clearHand(handHour, lastAngle.hour);
+//  clearHand(handSec, lastAngle.sec);
+//  clearHand(handMin, lastAngle.min);
+//  clearHand(handHour, lastAngle.hour);
+  g.setColor(0);
+  g.fillCircle(centerX,centerY, handSec.height+1);
   drawHand(handHour, rotHour);
   drawHand(handMin, rotMin);
   drawHand(handSec, rotSec);
-  lastAngle.sec = rotSec;
-  lastAngle.min = rotMin;
-  lastAngle.hour = rotHour;
+//  lastAngle.sec = rotSec;
+//  lastAngle.min = rotMin;
+//  lastAngle.hour = rotHour;
   g.setColor(palette[1]);
   g.fillCircle(centerX, centerY, 8);
 }
