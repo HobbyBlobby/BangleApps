@@ -1,118 +1,177 @@
-var GlobalBuffer = require("buffer.js");
-//GlobalBuffer = require("https://github.com/HobbyBlobby/BangleApps/blob/master/apps/flhome/buffer.js");
+require("Font8x16").add(Graphics);
 
-var HomeScreen = {
-    "mode": "single", // can also be cycle
-    "currentScreen": 0, // start with screen 0
-    "screen": null, // contains the module code
-    "screenList":  [
-      "analogclock.js",
-      "digitalclock.js"
-    ],
-    "timerID": null,
-    "cycleTimer": null
+const PI = Math.acos(0) * 2;
+
+var centerX = 239 / 2;
+var centerY = (239-23)/2 + 24;
+
+var radius = 100;
+
+function rotateAndMove(points, angle, dx, dy) {
+  for(var i = 0; i < points.length; i += 2) {
+  	  var x = points[i] * Math.cos(angle) - points[i+1] * Math.sin(angle) + dx;
+  	  points[i+1] = points[i] * Math.sin(angle) + points[i+1] * Math.cos(angle) + dy;
+      points[i] = x;
+  }
+  return points;
+}
+
+function getHand(handWidth, handLength, fill) {
+  var buf = Graphics.createArrayBuffer(handWidth+2,handLength,8,{msb:true});
+
+  var startX = handWidth/2.0;
+  var startY = 0;
+
+  var gutX = 0;
+  var gutY = handLength * 0.2;
+
+  var tipX = handWidth / 2.0;
+  var tipY = handLength;
+
+  var backX = handWidth;
+  var backY = handLength * 0.2;
+
+  var points = [startX+1, startY, gutX+1, gutY, tipX+1, tipY, backX+1, backY];
+  if(fill) {
+    buf.setColor(2);
+    buf.fillPoly(points, true);
+    buf.setColor(3);
+    buf.drawPoly(points, true);
+  } else {
+    buf.setColor(3);
+    buf.drawPoly(points, true);
+  }
+  return {
+    width : buf.getWidth(), height : buf.getHeight(), bpp : 8,
+    palette: palette,
+    transparent: 0,
+    buffer : buf.buffer};
+}
+
+var imgMinute = {
+  width : 6, height : 83, bpp : 8,
+  transparent : 254,
+  buffer : require("heatshrink").decompress(atob("AAMrlYFDq1WAreBwIFVw4FExGIAoesAousAsErAoJyCqw1BLQWBrtdIQWsMoIYCCoIZBDgQIDqwUCwIEBEAQEBFgYyCgwFBg5KNCIUGAoMxAoMxAoNdAoNdIoOyIIOyq0r65TB64zB1my2QnCBgIKCGQ6nuAtKeCa5AFMQYIFQEaAFTSv4FLeooFFwOBAYI="))
 };
 
-function unloadScreen(sModule) {
-  //Modules.removeCached(sModule);
-  delete HomeScreen.screen; 
-  HomeScreen.screen = null;
+var imgHour = {
+  width : 8, height : 49, bpp : 8,
+  transparent : 254,
+  buffer : require("heatshrink").decompress(atob("AAWs64HN2QHG64HIlYHGqwGDlfX2eBA4dW6+y1gHDwOy2WzDwmyw4wDDwNdqwgD1myGoOICAIOBrgLBmPXwIOBgwcCEIIODCAfXmJTE2YHGOYOHAwdc66EBrpaCQQQhBw9dAwJ5CCIKAGQ5KPMA5KXFOIOyT5uzU5GycwgGBbAgHJxwHEBwIHNC44HRH5pXHM479BA4yHGR46fCV5zHIAgQ="))
+};
+
+// gelb var palette = new Uint16Array([0, 0x4A41, 0xFFE5, 0xFFFF]);
+// gruen var palette = new Uint16Array([0, 0x0B07, 0x1752, 0xFFFF]);
+// blau var palette = new Uint16Array([0, 0x336D, 0x6FFF, 0xFFFF]);
+var palette = new Uint16Array([0, 0x0B07, 0xA757, 0xFFFF]);
+
+function drawTick(angle) {
+  var points = [0, radius-5, 0, radius];
+  points = rotateAndMove(points, angle - PI, centerX, centerY);
+  g.drawLine(points[0], points[1], points[2], points[3]);
 }
 
-function loadScreen(sModule) {
-//  if(sModule == "analogclock.js") {
-//      HomeScreen.screen = //require("https://raw.githubusercontent.com/HobbyBlobby/BangleApps/master/apps/flhome/analogclock.js");
-//  } else {
-//    HomeScreen.screen = //require("https://raw.githubusercontent.com/HobbyBlobby/BangleApps/master/apps/flhome/digitalclock.js");
-//  }
-  //Modules.addCached(sModule, sModule) ;
-  HomeScreen.screen = require(sModule);
+function drawHand(hand, angle) {
+  var x = hand.height/2 * Math.sin(angle);
+  var y = - hand.height/2 * Math.cos(angle);
+  g.drawImage(hand, centerX+x, centerY+y, {rotate:angle});
 }
+
+var handSec = getHand(2, radius-10, true);
+var handMin = imgMinute;//getHand(6, radius-30, true);
+var handHour = imgHour;//getHand(8, radius-60, true);
+function drawAnalog() {
+  var date = Date(Date.now());
+  var rotSec = date.getSeconds() * 2 * PI / 60;
+  var rotMin = date.getMinutes() * 2 * PI / 60;
+  var rotHour = date.getHours() * 2 * PI / 12;
+  g.clear();
+  //g.drawString(process.memory().free.toString(), 40, 10);
+  //g.drawString(process.memory().free.toString(), 40, 10);
+  //g.setColor(palette[3]);
+  for(var i = 0; i < 12; i++) {
+    if(date.getHours() % 12 == i) {
+      var x = radius * Math.sin(i/12 * 2*PI) + centerX;
+      var y = - radius * Math.cos(i/12 * 2*PI) + centerY;
+      g.setColor(palette[2]);
+      g.setFont("4x6", 2);
+      g.setFontAlign(0,0);
+      g.drawString(date.getHours().toString(), x, y);
+      //drawTick(i/12.0 * 2*PI);
+    } else {
+      drawTick(i/12.0 * 2*PI);
+    }
+  }
+  //g.drawCircle(centerX, centerY, radius);
+  drawHand(handHour, rotHour);
+  drawHand(handMin, rotMin);
+  drawHand(handSec, rotSec);
+  g.setColor(palette[1]);
+  g.fillCircle(centerX, centerY, 8);
+}
+
+function drawDigital() {
+  g.clear();
+  g.setFontAlign(0,0);
+  g.setFont("8x16", 3);
+  var curDate = Date(Date.now());
+  var hours = ('00' + curDate.getHours()).slice(-2);
+  var minutes = ('00' + curDate.getMinutes()).slice(-2);
+  var seconds = ('00' + curDate.getSeconds()).slice(-2);
+  g.setColor(palette[3]);
+  g.drawString(hours + ":" + minutes + ":" + seconds, centerX,80);
+
+  g.setFont("6x8", 2);
+  var year = '' + curDate.getFullYear();
+  var month = ('00' + (curDate.getMonth() + 1)).slice(-2);
+  var day = ('00' + curDate.getDate()).slice(-2);
+  g.setColor(palette[2]);
+  g.drawString(day + "." + month + "." + year, centerX, 120);
+}
+
+var screen = 0;
+var draw = drawAnalog;
 
 function nextScreen(dir) {
-    if(HomeScreen.timerID) {
-        clearInterval(HomeScreen.timerID);
-        HomeScreen.timerID = null;
-    }
-    var oldScreen = HomeScreen.screenList[HomeScreen.currentScreen];
-    if(dir == 1) {
-        HomeScreen.currentScreen++;
-        if(HomeScreen.currentScreen >= HomeScreen.screenList.length) {
-            HomeScreen.currentScreen = 0;
-        }
-    } else {
-        HomeScreen.currentScreen--;
-        if(HomeScreen.currentScreen < 0) {
-            HomeScreen.currentScreen = HomeScreen.screenList.length - 1;
-        }
-    }
-    if (!Bangle.isLCDOn()) return;
-    unloadScreen(HomeScreen.screenList[HomeScreen.currentScreen]);
-    loadScreen(HomeScreen.screenList[HomeScreen.currentScreen]);
-    HomeScreen.timerID = setInterval(draw, 1000);    
-}
-
-function draw() {
-    if (!Bangle.isLCDOn()) return;
-//     print(process.memory());
-    GlobalBuffer.clear();
-    if(HomeScreen.screen) {
-        HomeScreen.screen.draw();
-    }
-    // TODO draw screen status (dots 1 of 3)
-    GlobalBuffer.buf.setColor(3);
-    GlobalBuffer.buf.drawString(process.memory().free.toString(), 10,10);
-    GlobalBuffer.flip();
-}
-
-function switchCycle() {
-    print("Switch");
-    if(HomeScreen.cycleTimer) {
-        clearInterval(HomeScreen.cycleTimer);
-        HomeScreen.cycleTimer = null;
-    } else {
-        HomeScreen.cycleTimer = setInterval(nextScreen, 8000, 1);
-    }
-}
-
-function init() {
-    g.clear();
-    Bangle.loadWidgets();
-    Bangle.drawWidgets();
-
-    loadScreen(HomeScreen.screenList[0]);
-    HomeScreen.timerID = setInterval(draw, 1000);
+  if(timer) {
+    clearInterval(timer);
+  }
+  if(screen == 0) {
+    screen++;
+    draw = drawDigital;
+     timer = setInterval(draw, 1000);
     draw();
+  } else if (screen == 1) {
+    screen = 0;
+    draw = drawAnalog;
+    timer = setInterval(draw, 1000);
+    draw();
+  }
 }
 
-function loadBangleLauncher() {
-    clearInterval(HomeScreen.timerID);
-    delete GlobalBuffer;
-    delete HomeScreen;
-    
-    Bangle.showLauncher();
-}
-
-// Bangle.on('lcdPower',function(on) {
-//   if (on)
-//     draw();
-// });
+var timer = null;
+Bangle.on('lcdPower',function(on) {
+   if (on) {
+     timer = setInterval(draw, 1000);
+     draw();
+   } else {
+     if(timer) {
+       clearInterval(timer);
+     }
+   }
+});
 
 //dir left = -1, right = 1
 Bangle.on('swipe', function(dir) {
   nextScreen(dir);
 });
 
-// switch to cycle mode when long pressing btn1
-// setWatch(function(e){
-//     var isLong = (e.time-e.lastTime) > 2.0;
-//     if(isLong) {
-//         switchCycle();
-//     }
-// }, BTN1, {repeat:true, debounce:50, edge:"falling"});
-
-// init the app
-init();
-
 // Show launcher when middle button pressed
-setWatch(loadBangleLauncher, BTN2, {repeat:false,edge:"falling"});
+setWatch(Bangle.showLauncher, BTN2, {repeat:false,edge:"falling"});
+
+g.clear();
+Bangle.loadWidgets();
+Bangle.drawWidgets();
+
+timer = setInterval(draw, 1000);
+draw();

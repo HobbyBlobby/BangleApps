@@ -965,9 +965,6 @@
     "allow_emulator":true,
     "storage": [
       {"name":"flhome.app.js","url":"homescreen.app.js"},
-      {"name":"buffer.js","url":"buffer.js"},
-      {"name":"analogclock.js","url":"analogclock.js"},
-      {"name":"digitalclock.js","url":"digitalclock.js"},
       {"name":"flhome.img","url":"clock-morphing-icon.js","evaluate":true}
     ]
   },
