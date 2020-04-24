@@ -165,9 +165,11 @@ function drawDigital() {
 var screen = 0;
 var draw = drawAnalog;
 
-function init() {
-  g.setColor(0);
-  g.fillRect(0,23, 239, 239);
+function clear() {
+  //g.setColor(0);
+  //g.fillRect(0,23, 239, 239);
+  g.clear();
+  Bangle.drawWidgets();
   initialDraw = true;
 }
 
@@ -175,18 +177,17 @@ function nextScreen(dir) {
   if(timer) {
     clearInterval(timer);
   }
-  init();
+  clear();
   if(screen == 0) {
     screen++;
     draw = drawDigital;
      timer = setInterval(draw, 1000);
-    draw();
   } else if (screen == 1) {
     screen = 0;
     draw = drawAnalog;
     timer = setInterval(draw, 1000);
-    draw();
   }
+  draw();
 }
 
 var timer = null;
@@ -212,6 +213,7 @@ setWatch(Bangle.showLauncher, BTN2, {repeat:false,edge:"falling"});
 g.clear();
 Bangle.loadWidgets();
 Bangle.drawWidgets();
+//g.drawString("Hier stehe die Widgets", 0, 0);
 
 timer = setInterval(draw, 1000);
 draw();
