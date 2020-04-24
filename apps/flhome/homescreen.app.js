@@ -76,56 +76,82 @@ function drawHand(hand, angle) {
   g.drawImage(hand, centerX+x, centerY+y, {rotate:angle});
 }
 
+function clearHand(hand, angle) {
+  var buf = Graphics.createArrayBuffer(hand.width,hand.height,1);
+  drawHand({width:buf.getWidth(),
+                 height:buf.getHeight(),
+                 buffer:buf.buffer,
+                 bpp:1},angle);
+}
+
 var handSec = getHand(2, radius-10, true);
 var handMin = imgMinute;//getHand(6, radius-30, true);
 var handHour = imgHour;//getHand(8, radius-60, true);
+var lastAngle = {"sec" : 0, "min": 0, "hour": 0};
+var lastHour = -1;
 function drawAnalog() {
   var date = Date(Date.now());
   var rotSec = date.getSeconds() * 2 * PI / 60;
   var rotMin = date.getMinutes() * 2 * PI / 60;
-  var rotHour = date.getHours() * 2 * PI / 12;
-  g.clear();
+  var rotHour = (date.getHours() + 1/60*date.getMinutes()) * 2 * PI / 12;
+  //g.clear();
   //g.drawString(process.memory().free.toString(), 40, 10);
   //g.drawString(process.memory().free.toString(), 40, 10);
   //g.setColor(palette[3]);
-  for(var i = 0; i < 12; i++) {
-    if(date.getHours() % 12 == i) {
-      var x = radius * Math.sin(i/12 * 2*PI) + centerX;
-      var y = - radius * Math.cos(i/12 * 2*PI) + centerY;
-      g.setColor(palette[2]);
-      g.setFont("4x6", 2);
-      g.setFontAlign(0,0);
-      g.drawString(date.getHours().toString(), x, y);
-      //drawTick(i/12.0 * 2*PI);
-    } else {
-      drawTick(i/12.0 * 2*PI);
+  if(lastHour != date.getHours()) {
+    for(var i = 0; i < 12; i++) {
+      if(date.getHours() % 12 == i) {
+        var x = radius * Math.sin(i/12 * 2*PI) + centerX;
+        var y = - radius * Math.cos(i/12 * 2*PI) + centerY;
+        g.setColor(palette[2]);
+        g.setFont("4x6", 2);
+        g.setFontAlign(0,0);
+        g.drawString(date.getHours().toString(), x, y);
+        //drawTick(i/12.0 * 2*PI);
+      } else {
+        drawTick(i/12.0 * 2*PI);
+      }
     }
   }
+  lastHour = date.getHours();
   //g.drawCircle(centerX, centerY, radius);
+  clearHand(handSec, lastAngle.sec);
+  clearHand(handMin, lastAngle.min);
+  clearHand(handHour, lastAngle.hour);
   drawHand(handHour, rotHour);
   drawHand(handMin, rotMin);
   drawHand(handSec, rotSec);
+  lastAngle.sec = rotSec;
+  lastAngle.min = rotMin;
+  lastAngle.hour = rotHour;
   g.setColor(palette[1]);
   g.fillCircle(centerX, centerY, 8);
 }
 
 function drawDigital() {
-  g.clear();
-  g.setFontAlign(0,0);
-  g.setFont("6x8", 4);
+//  g.clear();
+  var buf = Graphics.createArrayBuffer(238,239-23,2,{msb:true});
+
+  buf.setFontAlign(0,0);
+  buf.setFont("6x8", 4);
   var curDate = Date(Date.now());
   var hours = ('00' + curDate.getHours()).slice(-2);
   var minutes = ('00' + curDate.getMinutes()).slice(-2);
   var seconds = ('00' + curDate.getSeconds()).slice(-2);
-  g.setColor(palette[3]);
-  g.drawString(hours + ":" + minutes + ":" + seconds, centerX,80);
+  buf.setColor(3);
+  buf.drawString(hours + ":" + minutes + ":" + seconds, centerX,80);
 
-  g.setFont("6x8", 2);
+  buf.setFont("6x8", 2);
   var year = '' + curDate.getFullYear();
   var month = ('00' + (curDate.getMonth() + 1)).slice(-2);
   var day = ('00' + curDate.getDate()).slice(-2);
-  g.setColor(palette[2]);
-  g.drawString(day + "." + month + "." + year, centerX, 120);
+  buf.setColor(2);
+  buf.drawString(day + "." + month + "." + year, centerX, 120);
+    g.drawImage({width:buf.getWidth(),
+                 height:buf.getHeight(),
+                 buffer:buf.buffer,
+                 palette:palette,
+                 bpp:2},0,0);
 }
 
 var screen = 0;
