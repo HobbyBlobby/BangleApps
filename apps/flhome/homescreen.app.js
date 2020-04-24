@@ -6,6 +6,8 @@ var centerY = (239-23)/2 + 24;
 
 var radius = 100;
 
+var initialDraw = true;
+
 function rotateAndMove(points, angle, dx, dy) {
   for(var i = 0; i < points.length; i += 2) {
   	  var x = points[i] * Math.cos(angle) - points[i+1] * Math.sin(angle) + dx;
@@ -98,7 +100,7 @@ function drawAnalog() {
   //g.drawString(process.memory().free.toString(), 40, 10);
   //g.drawString(process.memory().free.toString(), 40, 10);
   //g.setColor(palette[3]);
-  if(lastHour != date.getHours()) {
+  if(initialDraw || lastHour != date.getHours()) {
     g.setColor(0);
     g.fillCircle(centerX, centerY, radius);
     for(var i = 0; i < 12; i++) {
@@ -161,11 +163,17 @@ function drawDigital() {
 var screen = 0;
 var draw = drawAnalog;
 
+function init() {
+  g.setColor(0);
+  g.fillRect(0,23, 239, 239);
+  initialDraw = true;
+}
+
 function nextScreen(dir) {
   if(timer) {
     clearInterval(timer);
   }
-  g.clear();
+  init();
   if(screen == 0) {
     screen++;
     draw = drawDigital;
