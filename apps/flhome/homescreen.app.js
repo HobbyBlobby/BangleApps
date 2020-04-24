@@ -128,7 +128,7 @@ function drawAnalog() {
   drawHand(handMin, rotMin);
   drawHand(handSec, rotSec);
   g.setColor(palette[1]);
-  g.fillCircle(centerX, centerY, 8);
+  g.drawCircle(centerX, centerY, 8);
 //  lastAngle.sec = rotSec;
 //  lastAngle.min = rotMin;
 //  lastAngle.hour = rotHour;
