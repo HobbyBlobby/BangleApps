@@ -161,6 +161,7 @@ function nextScreen(dir) {
   if(timer) {
     clearInterval(timer);
   }
+  g.clear();
   if(screen == 0) {
     screen++;
     draw = drawDigital;
