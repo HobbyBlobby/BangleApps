@@ -161,7 +161,7 @@ function drawDigital() {
                  height:buf.getHeight(),
                  buffer:buf.buffer,
                  palette:palette,
-                 bpp:2},0,0);
+                 bpp:2},0,23);
   initialDraw = false;
 }
 
