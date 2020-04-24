@@ -71,8 +71,8 @@ function drawTick(angle) {
 }
 
 function drawHand(hand, angle) {
-  var x = hand.height/2 * Math.sin(angle);
-  var y = - hand.height/2 * Math.cos(angle);
+  var x = (hand.height/2+8) * Math.sin(angle);
+  var y = - (hand.height/2+8) * Math.cos(angle);
   g.drawImage(hand, centerX+x, centerY+y, {rotate:angle});
 }
 
@@ -84,7 +84,7 @@ function clearHand(hand, angle) {
                  bpp:1},angle);
 }
 
-var handSec = getHand(2, radius-10, true);
+var handSec = getHand(2, radius-20, true);
 var handMin = imgMinute;//getHand(6, radius-30, true);
 var handHour = imgHour;//getHand(8, radius-60, true);
 var lastAngle = {"sec" : 0, "min": 0, "hour": 0};
@@ -121,15 +121,15 @@ function drawAnalog() {
 //  clearHand(handMin, lastAngle.min);
 //  clearHand(handHour, lastAngle.hour);
   g.setColor(0);
-  g.fillCircle(centerX,centerY, handSec.height+1);
+  g.fillCircle(centerX,centerY, handSec.height+9);
   drawHand(handHour, rotHour);
   drawHand(handMin, rotMin);
   drawHand(handSec, rotSec);
+  g.setColor(palette[1]);
+  g.fillCircle(centerX, centerY, 8);
 //  lastAngle.sec = rotSec;
 //  lastAngle.min = rotMin;
 //  lastAngle.hour = rotHour;
-  g.setColor(palette[1]);
-  g.fillCircle(centerX, centerY, 8);
 }
 
 function drawDigital() {
