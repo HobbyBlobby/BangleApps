@@ -1,5 +1,4 @@
-require("Font8x16").add(Graphics);
-
+//require("Font8x16").add(Graphics);
 const PI = Math.acos(0) * 2;
 
 var centerX = 239 / 2;
@@ -113,7 +112,7 @@ function drawAnalog() {
 function drawDigital() {
   g.clear();
   g.setFontAlign(0,0);
-  g.setFont("8x16", 3);
+  g.setFont("6x8", 4);
   var curDate = Date(Date.now());
   var hours = ('00' + curDate.getHours()).slice(-2);
   var minutes = ('00' + curDate.getMinutes()).slice(-2);
