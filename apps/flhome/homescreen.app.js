@@ -132,6 +132,7 @@ function drawAnalog() {
 //  lastAngle.sec = rotSec;
 //  lastAngle.min = rotMin;
 //  lastAngle.hour = rotHour;
+  initialDraw = false;
 }
 
 function drawDigital() {
@@ -158,6 +159,7 @@ function drawDigital() {
                  buffer:buf.buffer,
                  palette:palette,
                  bpp:2},0,0);
+  initialDraw = false;
 }
 
 var screen = 0;
