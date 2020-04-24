@@ -18,21 +18,22 @@ function rotateAndMove(points, angle, dx, dy) {
 }
 
 function getHand(handWidth, handLength, fill) {
-  var buf = Graphics.createArrayBuffer(handWidth+2,handLength,8,{msb:true});
+  var buf = Graphics.createArrayBuffer(12,handLength,8,{msb:true});
 
-  var startX = handWidth/2.0;
+  var startX = buf.getWidth()/2.0;
   var startY = 0;
 
-  var gutX = 0;
+  var gutX = (buf.getWidth() - handWidth)/2;
   var gutY = handLength * 0.2;
 
-  var tipX = handWidth / 2.0;
+  var tipX = buf.getWidth() / 2.0;
   var tipY = handLength;
 
-  var backX = handWidth;
+  var backX = buf.getWidth/2 + handWidth / 2;
   var backY = handLength * 0.2;
 
-  var points = [startX+1, startY, gutX+1, gutY, tipX+1, tipY, backX+1, backY];
+//  var points = [startX, startY, gutX, gutY, tipX, tipY, backX, backY];
+  var points = [startX, startY, startX, gutY, startX, tipY, startX, backY];
   if(fill) {
     buf.setColor(2);
     buf.fillPoly(points, true);
@@ -42,6 +43,8 @@ function getHand(handWidth, handLength, fill) {
     buf.setColor(3);
     buf.drawPoly(points, true);
   }
+  buf.setColor(1);
+  buf.fillCircle(buf.getWidth()/2, buf.getHeight()-buf.getWidth()/2, buf.getWidth()/2);
   return {
     width : buf.getWidth(), height : buf.getHeight(), bpp : 8,
     palette: palette,
@@ -73,8 +76,8 @@ function drawTick(angle) {
 }
 
 function drawHand(hand, angle) {
-  var x = (hand.height/2+8) * Math.sin(angle);
-  var y = - (hand.height/2+8) * Math.cos(angle);
+  var x = (hand.height/2) * Math.sin(angle);
+  var y = - (hand.height/2) * Math.cos(angle);
   g.drawImage(hand, centerX+x, centerY+y, {rotate:angle});
 }
 
@@ -105,8 +108,8 @@ function drawAnalog() {
     g.fillCircle(centerX, centerY, radius);
     for(var i = 0; i < 12; i++) {
       if(date.getHours() % 12 == i) {
-        var x = radius * Math.sin(i/12 * 2*PI) + centerX;
-        var y = - radius * Math.cos(i/12 * 2*PI) + centerY;
+        var x = (radius+5) * Math.sin(i/12 * 2*PI) + centerX;
+        var y = - (radius+5) * Math.cos(i/12 * 2*PI) + centerY;
         g.setColor(palette[2]);
         g.setFont("4x6", 2);
         g.setFontAlign(0,0);
@@ -123,12 +126,12 @@ function drawAnalog() {
 //  clearHand(handMin, lastAngle.min);
 //  clearHand(handHour, lastAngle.hour);
   g.setColor(0);
-  g.fillCircle(centerX,centerY, handSec.height+9);
+  g.fillCircle(centerX,centerY, radius-5);
   drawHand(handHour, rotHour);
   drawHand(handMin, rotMin);
   drawHand(handSec, rotSec);
   g.setColor(palette[1]);
-  g.drawCircle(centerX, centerY, 8);
+//  g.drawCircle(centerX, centerY, 8);
 //  lastAngle.sec = rotSec;
 //  lastAngle.min = rotMin;
 //  lastAngle.hour = rotHour;
