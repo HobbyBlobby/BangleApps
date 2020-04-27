@@ -98,8 +98,8 @@ function drawAnalog() {
   g.setColor(palette[2]);
   g.drawLine(centerX, centerY, points[0], points[1]);
   lastSecPoints = points;
-  drawHand(handMin, rotMin, 2, 0);
-  drawHand(handHour, rotHour, 3, 3);
+  drawHand(handMin, rotMin, 3, 3);
+  drawHand(handHour, rotHour, 4, 4);
   g.setColor(palette[1]);
 
   initialDraw = false;
