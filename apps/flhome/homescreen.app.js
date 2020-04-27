@@ -57,7 +57,9 @@ function clearHand(hand, angle) {
 var handMin = imgMinute;//getHand(6, radius-30, true);
 var handHour = imgHour;//getHand(8, radius-60, true);
 var lastAngle = {"sec" : 0, "min": 0, "hour": 0};
+var lastSecPoints = [];
 var lastHour = -1;
+var lastMin = -1;
 function drawAnalog() {
   var date = Date(Date.now());
   var rotSec = date.getSeconds() * 2 * PI / 60;
@@ -84,11 +86,19 @@ function drawAnalog() {
     }
   }
   lastHour = hour;
+  if(initialDraw || date.getMinutes() != lastMin) {
+    g.setColor(0);
+    g.fillCircle(centerX, centerY, handMin.height);
+  }
+  lastMin = date.getMinutes();
+  
   g.setColor(0);
-  g.fillCircle(centerX,centerY, radius-5);
+//  g.fillCircle(centerX,centerY, radius-5);
+  var points = rotateAndMove([0, -(radius-8)], rotSec, centerX, centerY);
+  g.drawLine(centerX, centerY, lastSecPoints[0], lastSecPoints[1]);
   g.setColor(palette[2]);
-  var points = rotateAndMove([0, radius-8], rotSec, centerX, centerY);
   g.drawLine(centerX, centerY, points[0], points[1]);
+  lastSecPoints = points;
   drawHand(handMin, rotMin, 0, 0);
   drawHand(handHour, rotHour, 2, 2);
   g.setColor(palette[1]);
