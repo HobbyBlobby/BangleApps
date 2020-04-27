@@ -1,5 +1,5 @@
 //require("Font8x16").add(Graphics);
-const PI = Math.acos(0) * 2;
+const PI = Math.PI;
 
 var centerX = 239 / 2;
 var centerY = (239-23)/2 + 24;
@@ -15,41 +15,6 @@ function rotateAndMove(points, angle, dx, dy) {
       points[i] = x;
   }
   return points;
-}
-
-function getHand(handWidth, handLength, fill) {
-  var buf = Graphics.createArrayBuffer(12,handLength,8,{msb:true});
-
-  var startX = buf.getWidth()/2.0;
-  var startY = 0;
-
-  var gutX = (buf.getWidth() - handWidth)/2;
-  var gutY = handLength * 0.2;
-
-  var tipX = buf.getWidth() / 2.0;
-  var tipY = handLength;
-
-  var backX = buf.getWidth/2 + handWidth / 2;
-  var backY = handLength * 0.2;
-
-//  var points = [startX, startY, gutX, gutY, tipX, tipY, backX, backY];
-  var points = [startX, startY, startX, gutY, startX, tipY, startX, backY];
-  if(fill) {
-    buf.setColor(2);
-    buf.fillPoly(points, true);
-    buf.setColor(3);
-    buf.drawPoly(points, true);
-  } else {
-    buf.setColor(3);
-    buf.drawPoly(points, true);
-  }
-//  buf.setColor(1);
-//  buf.fillCircle(buf.getWidth()/2, buf.getHeight()-buf.getWidth()/2, buf.getWidth()/2);
-  return {
-    width : buf.getWidth(), height : buf.getHeight(), bpp : 8,
-    palette: palette,
-    transparent: 0,
-    buffer : buf.buffer};
 }
 
 var imgMinute = {
@@ -89,7 +54,6 @@ function clearHand(hand, angle) {
                  bpp:1},angle);
 }
 
-var handSec = getHand(2, radius-20, true);
 var handMin = imgMinute;//getHand(6, radius-30, true);
 var handHour = imgHour;//getHand(8, radius-60, true);
 var lastAngle = {"sec" : 0, "min": 0, "hour": 0};
@@ -99,21 +63,19 @@ function drawAnalog() {
   var rotSec = date.getSeconds() * 2 * PI / 60;
   var rotMin = date.getMinutes() * 2 * PI / 60;
   var rotHour = (date.getHours() + 1/60*date.getMinutes()) * 2 * PI / 12;
-  //g.clear();
-  //g.drawString(process.memory().free.toString(), 40, 10);
-  //g.drawString(process.memory().free.toString(), 40, 10);
-  //g.setColor(palette[3]);
-  if(initialDraw || lastHour != date.getHours()) {
+
+  var hour = date.getHours() % 12;
+  if(initialDraw || lastHour != hour) {
     g.setColor(0);
     g.fillCircle(centerX, centerY, radius);
     for(var i = 0; i < 12; i++) {
-      if(date.getHours() % 12 == i) {
+      if(hour == i || hour + 1 == i) {
         var x = (radius) * Math.sin(i/12 * 2*PI) + centerX;
         var y = - (radius) * Math.cos(i/12 * 2*PI) + centerY;
         g.setColor(palette[2]);
         g.setFont("6x8", 1);
         g.setFontAlign(0,0);
-        g.drawString(date.getHours().toString(), x, y);
+        g.drawString(hour == i? hour.toString() : (hour+1).toString() , x, y);
         //drawTick(i/12.0 * 2*PI);
       } else {
         g.setColor(palette[2]);
@@ -121,24 +83,16 @@ function drawAnalog() {
       }
     }
   }
-  lastHour = date.getHours();
-  //g.drawCircle(centerX, centerY, radius);
-//  clearHand(handSec, lastAngle.sec);
-//  clearHand(handMin, lastAngle.min);
-//  clearHand(handHour, lastAngle.hour);
+  lastHour = hour;
   g.setColor(0);
   g.fillCircle(centerX,centerY, radius-5);
-  g.setColor(palette[3]);
+  g.setColor(palette[2]);
   var points = rotateAndMove([0, radius-8], rotSec, centerX, centerY);
   g.drawLine(centerX, centerY, points[0], points[1]);
-//  drawHand(handSec, rotSec, 0, 0);
   drawHand(handMin, rotMin, 0, 0);
-  drawHand(handHour, rotHour, 2, 4);
+  drawHand(handHour, rotHour, 2, 2);
   g.setColor(palette[1]);
-//  g.drawCircle(centerX, centerY, 8);
-//  lastAngle.sec = rotSec;
-//  lastAngle.min = rotMin;
-//  lastAngle.hour = rotHour;
+
   initialDraw = false;
 }
 
@@ -173,8 +127,6 @@ var screen = 0;
 var draw = drawAnalog;
 
 function clear() {
-  //g.setColor(0);
-  //g.fillRect(0,23, 239, 239);
   g.clear();
   Bangle.drawWidgets();
   initialDraw = true;
