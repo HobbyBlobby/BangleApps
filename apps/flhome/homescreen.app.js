@@ -41,8 +41,8 @@ function drawTick(angle) {
 }
 
 function drawHand(hand, angle, offX, offY) {
-  var x = (hand.height/2) * Math.sin(angle) + offX;
-  var y = - (hand.height/2) * Math.cos(angle) + offY;
+  var x = (hand.height/2-offX) * Math.sin(angle);
+  var y = - (hand.height/2-offY) * Math.cos(angle);
   g.drawImage(hand, centerX+x, centerY+y, {rotate:angle});
 }
 
