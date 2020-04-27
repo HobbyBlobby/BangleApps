@@ -69,7 +69,7 @@ function drawAnalog() {
   var hour = date.getHours() % 12;
   if(initialDraw || lastHour != hour) {
     g.setColor(0);
-    g.fillCircle(centerX, centerY, radius);
+    g.fillCircle(centerX, centerY, radius+4);
     for(var i = 0; i < 12; i++) {
       if(hour == i || hour + 1 == i) {
         var x = (radius) * Math.sin(i/12 * 2*PI) + centerX;
@@ -129,7 +129,7 @@ function drawDigital() {
                  height:buf.getHeight(),
                  buffer:buf.buffer,
                  palette:palette,
-                 bpp:2},0,23);
+                 bpp:2},0,24);
   initialDraw = false;
 }
 
