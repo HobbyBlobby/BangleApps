@@ -69,7 +69,6 @@ function drawHour(hour, i) {
 
 var handMin = imgMinute;//getHand(6, radius-30, true);
 var handHour = imgHour;//getHand(8, radius-60, true);
-var lastAngle = {"sec" : 0, "min": 0, "hour": 0};
 var lastSecPoints = [];
 var lastHour = -1;
 var lastMin = -1;
@@ -100,7 +99,7 @@ function drawAnalog() {
   lastHour = hour;
   if(initialDraw || date.getMinutes() != lastMin) {
     g.setColor(0);
-    g.fillCircle(centerX, centerY, handMin.height + 2);
+    g.fillCircle(centerX, centerY, handMin.height + 7);
   }
   lastMin = date.getMinutes();
 //  g.fillCircle(centerX,centerY, radius-5);
