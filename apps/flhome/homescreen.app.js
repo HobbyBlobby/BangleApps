@@ -41,8 +41,8 @@ function drawTick(angle) {
 }
 
 function drawHand(hand, angle, offX, offY) {
-  var x = (hand.height/2) * Math.sin(angle) - offX;
-  var y = - (hand.height/2) * Math.cos(angle) - offY;
+  var x = (hand.height/2) * Math.sin(angle) + offX;
+  var y = - (hand.height/2) * Math.cos(angle) + offY;
   g.drawImage(hand, centerX+x, centerY+y, {rotate:angle});
 }
 
@@ -88,19 +88,18 @@ function drawAnalog() {
   lastHour = hour;
   if(initialDraw || date.getMinutes() != lastMin) {
     g.setColor(0);
-    g.fillCircle(centerX, centerY, handMin.height);
+    g.fillCircle(centerX, centerY, handMin.height + 2);
   }
   lastMin = date.getMinutes();
-  
-  g.setColor(0);
 //  g.fillCircle(centerX,centerY, radius-5);
   var points = rotateAndMove([0, -(radius-8)], rotSec, centerX, centerY);
+  g.setColor(palette[0]);
   g.drawLine(centerX, centerY, lastSecPoints[0], lastSecPoints[1]);
   g.setColor(palette[2]);
   g.drawLine(centerX, centerY, points[0], points[1]);
   lastSecPoints = points;
-  drawHand(handMin, rotMin, 0, 0);
-  drawHand(handHour, rotHour, 2, 2);
+  drawHand(handMin, rotMin, 2, 0);
+  drawHand(handHour, rotHour, 3, 3);
   g.setColor(palette[1]);
 
   initialDraw = false;
