@@ -54,6 +54,19 @@ function clearHand(hand, angle) {
                  bpp:1},angle);
 }
 
+function drawHour(hour, i) {
+  var hourString = hour.toString();
+  if(hourString == "13") hourString = "1";
+  if(hourString == "0") hourString = "12";
+
+  var x = (radius-4) * Math.sin(i/12 * 2*PI) + centerX;
+  var y = - (radius-4) * Math.cos(i/12 * 2*PI) + centerY;
+  g.setColor(palette[2]);
+  g.setFont("6x8", 1);
+  g.setFontAlign(0,0);
+  g.drawString(hourString , x, y);
+}
+
 var handMin = imgMinute;//getHand(6, radius-30, true);
 var handHour = imgHour;//getHand(8, radius-60, true);
 var lastAngle = {"sec" : 0, "min": 0, "hour": 0};
@@ -67,18 +80,17 @@ function drawAnalog() {
   var rotHour = (date.getHours() + 1/60*date.getMinutes()) * 2 * PI / 12;
 
   var hour = date.getHours() % 12;
+//  if(hour == 0) {hour = 12;}
   if(initialDraw || lastHour != hour) {
     g.setColor(0);
-    g.fillCircle(centerX, centerY, radius+4);
+    g.fillCircle(centerX, centerY, radius+5);
     for(var i = 0; i < 12; i++) {
-      if(hour == i || hour + 1 == i) {
-        var x = (radius) * Math.sin(i/12 * 2*PI) + centerX;
-        var y = - (radius) * Math.cos(i/12 * 2*PI) + centerY;
-        g.setColor(palette[2]);
-        g.setFont("6x8", 1);
-        g.setFontAlign(0,0);
-        g.drawString(hour == i? hour.toString() : (hour+1).toString() , x, y);
-        //drawTick(i/12.0 * 2*PI);
+      if(hour == i) {
+        drawHour(hour, i);
+      } else if((hour+1)%12 == i) {
+        drawHour(hour+1, i);
+      } else if(hour == 12 && i == 0) {
+        drawHour(12, i);
       } else {
         g.setColor(palette[2]);
         drawTick(i/12.0 * 2*PI);
