@@ -156,6 +156,7 @@ function clear() {
 function nextScreen(dir) {
   if(timer) {
     clearInterval(timer);
+    timer = null;
   }
   clear();
   if(screen == 0) {
@@ -174,6 +175,7 @@ var timer = null;
 Bangle.on('lcdPower',function(on) {
    if(timer) {
      clearInterval(timer);
+     timer = null;
    }
    if (on) {
      timer = setInterval(draw, 1000);
