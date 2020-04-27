@@ -172,13 +172,12 @@ function nextScreen(dir) {
 
 var timer = null;
 Bangle.on('lcdPower',function(on) {
+   if(timer) {
+     clearInterval(timer);
+   }
    if (on) {
      timer = setInterval(draw, 1000);
      draw();
-   } else {
-     if(timer) {
-       clearInterval(timer);
-     }
    }
 });
 
