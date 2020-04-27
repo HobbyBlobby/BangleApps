@@ -163,6 +163,19 @@
       {"name":"wclock.img","url":"clock-word-icon.js","evaluate":true}
     ]
   },
+  { "id": "impwclock",
+    "name": "Imprecise Word Clock",
+    "icon": "clock-impword.png",
+    "version":"0.01",
+    "description": "Imprecise word clock for vacations, weekends, and those who never need accurate time.",
+    "tags": "clock",
+    "type":"clock",
+    "allow_emulator":true,
+    "storage": [
+      {"name":"impwclock.app.js","url":"clock-impword.js"},
+      {"name":"impwclock.img","url":"clock-impword-icon.js","evaluate":true}
+    ]
+  },
   { "id": "aclock",
     "name": "Analog Clock",
     "icon": "clock-analog.png",
@@ -1038,7 +1051,7 @@
   { "id": "barclock",
     "name": "Bar Clock",
     "icon": "clock-bar.png",
-    "version":"0.04",
+    "version":"0.05",
     "description": "A simple digital clock showing seconds as a bar",
     "tags": "clock",
     "type":"clock",
@@ -1507,6 +1520,22 @@
     "storage": [
       {"name":"pong.app.js","url":"app.js"},
       {"name":"pong.img","url":"app-icon.js","evaluate":true}
+    ]
+  },
+  { "id": "ballmaze",
+    "name": "Ball Maze",
+    "icon": "icon.png",
+    "version": "0.01",
+    "description": "Navigate a ball through a maze by tilting your watch.",
+    "readme": "README.md",
+    "tags": "game",
+    "type": "app",
+    "storage": [
+      {"name": "ballmaze.app.js","url":"app.js"},
+      {"name": "ballmaze.img","url":"icon.js","evaluate": true}
+    ],
+    "data": [
+      {"name": "ballmaze.json"}
     ]
   }
 ]
