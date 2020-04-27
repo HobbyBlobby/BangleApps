@@ -43,8 +43,8 @@ function getHand(handWidth, handLength, fill) {
     buf.setColor(3);
     buf.drawPoly(points, true);
   }
-  buf.setColor(1);
-  buf.fillCircle(buf.getWidth()/2, buf.getHeight()-buf.getWidth()/2, buf.getWidth()/2);
+//  buf.setColor(1);
+//  buf.fillCircle(buf.getWidth()/2, buf.getHeight()-buf.getWidth()/2, buf.getWidth()/2);
   return {
     width : buf.getWidth(), height : buf.getHeight(), bpp : 8,
     palette: palette,
@@ -61,7 +61,7 @@ var imgMinute = {
 var imgHour = {
   width : 8, height : 49, bpp : 8,
   transparent : 254,
-  buffer : require("heatshrink").decompress(atob("AAWs64HN2QHG64HIlYHGqwGDlfX2eBA4dW6+y1gHDwOy2WzDwmyw4wDDwNdqwgD1myGoOICAIOBrgLBmPXwIOBgwcCEIIODCAfXmJTE2YHGOYOHAwdc66EBrpaCQQQhBw9dAwJ5CCIKAGQ5KPMA5KXFOIOyT5uzU5GycwgGBbAgHJxwHEBwIHNC44HRH5pXHM479BA4yHGR46fCV5zHIAgQ="))
+  buffer : require("heatshrink").decompress(atob("AAWs64HN2QHG64HIlYHGqwGDlfX2eBA4dW6+y1gHDwOy2WzDwmyw4wDDwNdqwgD1myGoOICAIOBrgLBmPXwIOBgwcCEIIODCAfXmJTE2YHGOYOHAwdc66EBrpaCQQQhBw9dAwJ5CCIKAGQ5KPMA5KXFOIOyT5uzU5GycwgGBbAgHJxwHEBwIHNC44HRH5pXGleHx2O2UHAwgABw8HroGDAANdxAHFxAHHC48rCAmIZIIwDw4GBA="))
 };
 
 // gelb var palette = new Uint16Array([0, 0x4A41, 0xFFE5, 0xFFFF]);
@@ -75,9 +75,9 @@ function drawTick(angle) {
   g.drawLine(points[0], points[1], points[2], points[3]);
 }
 
-function drawHand(hand, angle) {
-  var x = (hand.height/2) * Math.sin(angle);
-  var y = - (hand.height/2) * Math.cos(angle);
+function drawHand(hand, angle, offX, offY) {
+  var x = (hand.height/2) * Math.sin(angle) - offX;
+  var y = - (hand.height/2) * Math.cos(angle) - offY;
   g.drawImage(hand, centerX+x, centerY+y, {rotate:angle});
 }
 
@@ -108,14 +108,15 @@ function drawAnalog() {
     g.fillCircle(centerX, centerY, radius);
     for(var i = 0; i < 12; i++) {
       if(date.getHours() % 12 == i) {
-        var x = (radius+5) * Math.sin(i/12 * 2*PI) + centerX;
-        var y = - (radius+5) * Math.cos(i/12 * 2*PI) + centerY;
+        var x = (radius) * Math.sin(i/12 * 2*PI) + centerX;
+        var y = - (radius) * Math.cos(i/12 * 2*PI) + centerY;
         g.setColor(palette[2]);
-        g.setFont("4x6", 2);
+        g.setFont("6x8", 1);
         g.setFontAlign(0,0);
         g.drawString(date.getHours().toString(), x, y);
         //drawTick(i/12.0 * 2*PI);
       } else {
+        g.setColor(palette[2]);
         drawTick(i/12.0 * 2*PI);
       }
     }
@@ -127,9 +128,12 @@ function drawAnalog() {
 //  clearHand(handHour, lastAngle.hour);
   g.setColor(0);
   g.fillCircle(centerX,centerY, radius-5);
-  drawHand(handHour, rotHour);
-  drawHand(handMin, rotMin);
-  drawHand(handSec, rotSec);
+  g.setColor(palette[3]);
+  var points = rotateAndMove([0, radius-8], rotSec, centerX, centerY);
+  g.drawLine(centerX, centerY, points[0], points[1]);
+//  drawHand(handSec, rotSec, 0, 0);
+  drawHand(handMin, rotMin, 0, 0);
+  drawHand(handHour, rotHour, 2, 4);
   g.setColor(palette[1]);
 //  g.drawCircle(centerX, centerY, 8);
 //  lastAngle.sec = rotSec;
