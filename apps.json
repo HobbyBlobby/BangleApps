@@ -957,15 +957,15 @@
   },
   { "id": "flhome",
     "name": "fl Home Screen",
-    "icon": "clock-morphing.png",
-    "version":"0.03",
+    "icon": "app.png",
+    "version":"0.04",
     "description": "Replacement for Home Screen with pages",
     "tags": "clock",
     "type":"clock",
     "allow_emulator":true,
     "storage": [
       {"name":"flhome.app.js","url":"homescreen.app.js"},
-      {"name":"flhome.img","url":"clock-morphing-icon.js","evaluate":true}
+      {"name":"flhome.img","url":"app-icon.js","evaluate":true}
     ]
   },
   { "id": "flclock",
