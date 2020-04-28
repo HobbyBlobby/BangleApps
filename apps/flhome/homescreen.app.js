@@ -118,7 +118,7 @@ function drawAnalog() {
 
 function drawDigital() {
 //  g.clear();
-  var buf = Graphics.createArrayBuffer(238,239-23,2,{msb:true});
+  var buf = Graphics.createArrayBuffer(238,180,2,{msb:true});
 
   buf.setFontAlign(0,0);
   buf.setFont("6x8", 4);
@@ -143,8 +143,37 @@ function drawDigital() {
   initialDraw = false;
 }
 
+function drawHello() {
+  var buf = Graphics.createArrayBuffer(238,180,2,{msb:true});
+
+  buf.setFontAlign(0,0);
+  buf.setFont("6x8", 3);
+  buf.setColor(3);
+  buf.drawString("Hello World!", centerX,80);
+  g.drawImage({width:buf.getWidth(),
+               height:buf.getHeight(),
+               buffer:buf.buffer,
+               palette:palette,
+               bpp:2},0,24);
+  initialDraw = false;
+}
+
+function drawScreenIndicator(current, total) {
+  for(var i = 0; i < total; i++) {
+    if(i == current) {
+      g.setColor(palette[2]);
+      g.fillCircle(10 + 10 * i , 220, 3);
+    } else {
+      g.setColor(palette[1]);
+      g.drawCircle(10 + 10* i , 220, 3);
+    }
+  }
+}
+
 var screen = 0;
-var draw = drawAnalog;
+var screens = [drawAnalog, drawDigital,drawHello];
+var totalScreens = screens.length;
+var draw = screens[0];
 
 function clear() {
   g.clear();
@@ -158,16 +187,17 @@ function nextScreen(dir) {
     timer = null;
   }
   clear();
-  if(screen == 0) {
+  if(dir == -1) {
     screen++;
-    draw = drawDigital;
-     timer = setInterval(draw, 1000);
-  } else if (screen == 1) {
-    screen = 0;
-    draw = drawAnalog;
-    timer = setInterval(draw, 1000);
+    if(screen >= screens.length) { screen = 0;}
+  } else {
+    screen--;
+    if(screen < 0) {screen = screens.length - 1;}
   }
+  draw = screens[screen];
+  timer = setInterval(draw, 1000);
   draw();
+  drawScreenIndicator(screen, totalScreens);
 }
 
 var timer = null;
@@ -179,6 +209,7 @@ Bangle.on('lcdPower',function(on) {
    if (on) {
      timer = setInterval(draw, 1000);
      draw();
+     drawScreenIndicator(screen, totalScreens);
    }
 });
 
@@ -197,3 +228,4 @@ Bangle.drawWidgets();
 
 timer = setInterval(draw, 1000);
 draw();
+drawScreenIndicator(screen, totalScreens);
