@@ -182,6 +182,7 @@ function clear() {
 }
 
 function nextScreen(dir) {
+  if (!Bangle.isLCDOn()) return; // ignore gesture when display is of
   if(timer) {
     clearInterval(timer);
     timer = null;
