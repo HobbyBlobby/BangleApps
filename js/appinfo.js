@@ -1,10 +1,17 @@
+if (typeof btoa==="undefined") {
+  // Don't define btoa as a function here because Apple's
+  // iOS browser defines the function even though it's in
+  // an IF statement that is never executed!
+  btoa = function(d) { return BufferA.from(d).toString('base64'); }
+}
+
 // Converts a string into most efficient way to send to Espruino (either json, base64, or compressed base64)
 function toJS(txt) {
   var json = JSON.stringify(txt);
   var b64 = "atob("+JSON.stringify(btoa(json))+")";
   var js = b64.length < json.length ? b64 : json;
 
-  if (heatshrink) {
+  if (typeof heatshrink !== "undefined") {
     var ua = new Uint8Array(txt.length);
     for (var i=0;i<txt.length;i++)  ua[i] = txt.charCodeAt(i);
     var c = heatshrink.compress(ua);
