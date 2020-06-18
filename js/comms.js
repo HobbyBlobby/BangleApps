@@ -1,16 +1,23 @@
-Puck.debug=3;
+//Puck.debug=3;
+console.log("=============================================")
+console.log("Type 'Puck.debug=3' for full BLE debug info")
+console.log("=============================================")
 
 // FIXME: use UART lib so that we handle errors properly
 const Comms = {
   reset : (opt) => new Promise((resolve,reject) => {
-    var tries = 5;
+    let tries = 8;
+    console.log("<COMMS> reset");
     Puck.write(`\x03\x10reset(${opt=="wipe"?"1":""});\n`,function rstHandler(result) {
       console.log("<COMMS> reset: got "+JSON.stringify(result));
       if (result===null) return reject("Connection failed");
       if (result=="" && (tries-- > 0)) {
         console.log(`<COMMS> reset: no response. waiting ${tries}...`);
         Puck.write("\x03",rstHandler);
-      } else setTimeout(resolve,250);
+      } else {
+        console.log(`<COMMS> reset: complete.`);
+        setTimeout(resolve,250);
+      }
     });
   }),
   uploadApp : (app,skipReset) => { // expects an apps.json structure (i.e. with `storage`)
@@ -133,7 +140,7 @@ const Comms = {
       return cmd.replace('\u0001', '\\x01')
     }).join("");
     console.log("<COMMS> removeApp", cmds);
-    return Comms.reset().then(new Promise((resolve,reject) => {
+    return Comms.reset().then(() => new Promise((resolve,reject) => {
       Puck.write(`\x03\x10E.showMessage('Erasing\\n${app.id}...')${cmds}\x10E.showMessage('Hold BTN3\\nto reload')\n`,(result) => {
         Progress.hide({sticky:true});
         if (result===null) return reject("");
@@ -145,14 +152,28 @@ const Comms = {
     });
   },
   removeAllApps : () => {
-    Progress.show({title:"Removing all apps",progess:"animate",sticky:true});
+    console.log("<COMMS> removeAllApps start");
+    Progress.show({title:"Removing all apps",percent:"animate",sticky:true});
     return new Promise((resolve,reject) => {
-    // Use write with newline here so we wait for it to finish
-      Puck.write('\x10E.showMessage("Erasing...");require("Storage").eraseAll();Bluetooth.println("OK");reset()\n', (result,err) => {
-        Progress.hide({sticky:true});
-        if (!result || result.trim()!="OK") return reject(err || "");
-        resolve();
-      }, true /* wait for newline */);
+      let timeout = 5;
+      function handleResult(result,err) {
+        console.log("<COMMS> removeAllApps: received "+JSON.stringify(result));
+        if (result=="" && (timeout--)) {
+          console.log("<COMMS> removeAllApps: no result - waiting some more ("+timeout+").");
+          // send space and delete - so it's something, but it should just cancel out
+          Puck.write(" \u0008", handleResult, true /* wait for newline */);
+        } else {
+          Progress.hide({sticky:true});
+          if (!result || result.trim()!="OK") {
+            if (!result) result = "No response";
+            else result = "Got "+JSON.stringify(result.trim());
+            return reject(err || result);
+          } else resolve();
+        }
+      }
+      // Use write with newline here so we wait for it to finish
+      let cmd = '\x10E.showMessage("Erasing...");require("Storage").eraseAll();Bluetooth.println("OK");reset()\n';
+      Puck.write(cmd, handleResult, true /* wait for newline */);
     });
   },
   setTime : () => {

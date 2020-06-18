@@ -96,7 +96,7 @@ var locales = {
     month: "Januar,Februar,März,April,Mai,Juni,Juli,August,September,Oktober,November,Dezember",
     abday: "So,Mo,Di,Mi,Do,Fr,Sa",
     day: "Sonntag,Montag,Dienstag,Mittwoch,Donnerstag,Freitag,Samstag",
-    trans: { yes: "ja", Yes: "Ja", no: "nein", No: "Nein", ok: "ok", on: "an", off: "aus" }
+    trans: { yes: "ja", Yes: "Ja", no: "nein", No: "Nein", ok: "ok", on: "an", off: "aus", "< Back": "< Zurück" }
   },
   "en_US": {
     lang: "en_US",
@@ -212,12 +212,12 @@ var locales = {
     thousands_sep: ",",
     currency_symbol: "$",
     int_curr_symbol: "AUD",
-    speed: "mph",
-    distance: { 0: "mi", 1: "kmi" },
-    temperature: "°F",
+    speed: "kmh",
+    distance: { 0: "m", 1: "km" },
+    temperature: "°C",
     ampm: { 0: "am", 1: "pm" },
     timePattern: { 0: "%HH:%MM:%SS ", 1: "%HH:%MM" },
-    datePattern: { 0: "%A, %B %d, %Y", "1": "%m/%d/%y" }, //  Sunday, 1 March 2020  // 1/3/20
+    datePattern: { 0: "%A, %B %d, %Y", "1": "%d/%m/%y" }, //  Sunday, 1 March 2020  // 1/3/20
     abmonth: "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec",
     month: "January,February,March,April,May,June,July,August,September,October,November,December",
     abday: "Sun,Mon,Tue,Wed,Thu,Fri,Sat",
@@ -486,12 +486,12 @@ var locales = {
     temperature: "°C",
     ampm: { 0: "dop.", 1: "pop." },
     timePattern: { 0: "%HH:%MM:%SS", 1: "%HH:%MM" },
-    datePattern: { 0: "%d. %b %Y", 1: "%d.%m.%Y" }, // "30. jan. 2020" // "30.01.2020"(short)
+    datePattern: { 0: "%-d. %b %Y", 1: "%-d.%-m.%Y" }, // "3. jan. 2020" // "3.1.2020"(short)
     abmonth: "jan.,feb.,mar.,apr.,maj,jun.,jul.,avg.,sep.,okt.,nov.,dec.",
     month: "januar,februar,marec,april,maj,junij,julij,avgust,september,oktober,november,december",
     abday: "ned.,pon.,tor.,sre.,čet.,pet.,sob.",
     day: "nedelja,ponedeljek,torek,sreda,četrtek,petek,sobota",
-    trans: { yes: "da", Yes: "Da", no: "ne", No: "Ne", ok: "ok", on: "On", off: "Off" }
+    trans: { yes: "da", Yes: "Da", no: "ne", No: "Ne", ok: "ok", on: "Vklj.", off: "Izklj.", "< Back": "< Nazaj" }
   }/*,
   "he_IL": { // This won't work until we get a font - see https://github.com/espruino/BangleApps/issues/399
     codePage : "ISO8859-8",
