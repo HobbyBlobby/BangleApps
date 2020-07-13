@@ -80,7 +80,7 @@
     "name": "Notifications (default)",
     "shortName":"Notifications",
     "icon": "notify.png",
-    "version":"0.01",
+    "version":"0.02",
     "description": "A handler for displaying notifications that displays them in a bar at the top of the screen",
     "tags": "widget",
     "type": "notify",
@@ -93,7 +93,7 @@
     "name": "Fullscreen Notifications",
     "shortName":"Notifications",
     "icon": "notify.png",
-    "version":"0.01",
+    "version":"0.02",
     "description": "A handler for displaying notifications that displays them fullscreen. This may not fully restore the screen after on some apps. See `Notifications (default)` for more information about the notifications library.",
     "tags": "widget",
     "type": "notify",
@@ -121,7 +121,7 @@
   { "id": "gbridge",
     "name": "Gadgetbridge",
     "icon": "app.png",
-    "version":"0.15",
+    "version":"0.16",
     "description": "The default notification handler for Gadgetbridge notifications from Android",
     "tags": "tool,system,android,widget",
     "type":"widget",
@@ -344,7 +344,7 @@
   { "id": "gpsrec",
     "name": "GPS Recorder",
     "icon": "app.png",
-    "version":"0.11",
+    "version":"0.12",
     "interface": "interface.html",
     "description": "Application that allows you to record a GPS track. Can run in background",
     "tags": "tool,outdoors,gps,widget",
@@ -2071,6 +2071,23 @@
     "storage": [
       {"name":"widancs.wid.js","url":"ancs.min.js"},
       {"name":"widancs.settings.js","url":"settings.js"}
+    ]
+  },
+  { "id": "accelrec",
+    "name": "Acceleration Recorder",
+    "shortName":"Accel Rec",
+    "icon": "app.png",
+    "version":"0.01",
+    "interface": "interface.html",
+    "description": "This app puts the Bangle's accelerometer into 100Hz mode and reads 2 seconds worth of data after movement starts. The data can then be exported back to the PC.",
+    "tags": "",
+    "readme": "README.md",
+    "storage": [
+      {"name":"accelrec.app.js","url":"app.js"},
+      {"name":"accelrec.img","url":"app-icon.js","evaluate":true}
+    ],
+    "data": [
+      {"wildcard":"accelrec.?.csv" }
     ]
   },
   {
